@@ -1,4 +1,11 @@
-stamina = 100
+health = 10000
+if health >= 1:
+    alive = True
+else:
+    alive = False
+while alive == False:
+    print("you have failed " + name + " you will meet your family again, goodbye friend")
+    break
 name = input("what is your name traveler? ")
 print("hello " + name + " welcome to your journey, a warning for you, always type in lowercase.")
 family = input("do you have a family " + name + "? ")
@@ -49,3 +56,6 @@ if choice == True:
     print("stamina is " + str(stamina))
     print("mana is " + str(mana))
     print("health is " + str(health))
+slimeattacknormal = 100000
+damage = health - slimeattacknormal
+
