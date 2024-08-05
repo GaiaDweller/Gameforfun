@@ -4,7 +4,7 @@ import time
 # Random sleep durations
 sleep_short = random.uniform(1, 2)
 sleep_duration = random.uniform(2, 4)
-sleep_long = random.uniform(5, 10)
+sleep_long = random.uniform(5, 7)
 
 # Global variables
 health = 100
@@ -14,7 +14,26 @@ power = 0
 summonslots = 0
 spec = "none"
 name = ""
-
+def mainplaymenu():
+    main = ("inventory", "quests", "stats", "Look around")
+    print(main)
+def checkiffunccontinue(): #Developer tool to check if a repear function passes correctly
+    wwasdsadas = input("did this pop up").strip().lower()
+    time.sleep(sleep_short)
+    if wwasdsadas == "yes":
+        print("it worked")
+    if wwasdsadas == "no":
+        print("Liar")
+def checklocation(): #CHECKS THE LOCATION OF A PLAYER, useful for if player is in wrong location for quest
+    global locationcheck
+    global playerlocation
+    global location
+    locationcheck = False
+    if location == playerlocation:
+        locationcheck = True
+    else:
+        print("you are in the wrong town for that")
+        locationcheck = False
 def startofgame():
     global health, stamina, mana, power, summonslots, spec
     health = 100
@@ -24,9 +43,13 @@ def startofgame():
     summonslots = 0
     nameis()
     purpose()
-    mainclass()
-    youchose()
-
+    def checkclass():
+        mainclass()
+        youchose()
+        readstats()
+        startofadventure()
+    checkclass()
+    
 def startagain():
     startofgame()
 
@@ -53,7 +76,7 @@ def isplayeralive():
 def nameis(): # Asks the player's name
     global name
     name = input("What is your name, traveler? ").strip()
-    time.sleep(sleep_duration)
+    time.sleep(sleep_short)
     print("Hello " + name + ", welcome to your journey.")
     time.sleep(sleep_short)
 
@@ -119,6 +142,40 @@ def youchose():
     print("Health is " + str(health))
     if summonslots >= 1:
         print("You have " + str(summonslots) + " summon slot(s).")
-
+def readstats():
+    time.sleep(sleep_long)
+    readd = False
+    while not readd:
+        read = input("have you read your stats? ").strip().lower()
+        if read == "yes":
+            readd = True
+        if read == "no":
+            readstats()
+        else:
+            print("invalid input, yes or no")
+def startofadventure():
+    time.sleep(sleep_short)
+    starttt = False
+    while not starttt:
+        print("This is the start of your journey, are you sure you want that class for the rest of it?")
+        finalizeclass = input("Yes or No ").strip().lower()
+        if finalizeclass == "yes":
+            starttown()
+            starttt = True
+        if finalizeclass == "no":
+            time.sleep(sleep_short)
+            print("choose well friend")
+            starttt = True
+            mainclass()
+            youchose()
+        else:
+            print("invalid input, yes or no") #FIXTHISITSAYSIT
+def starttown():
+    print("you begin your journey in mildew village, a small town with a rough population of 28, there may be a few things to do around town.")
+    time.sleep(sleep_duration)
+    mildewvillage()
+def mildewvillage():
+    mainplaymenu()
+    
 # Start the game
 startofgame()
