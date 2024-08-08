@@ -13,7 +13,24 @@ class colors:
     BLUE = '\033[94m' #rare
     MAGENTA = '\033[95m'#quest item
     END = '\033[0m'
-
+def additem(inv, item_id, name, quantity, value, power, mana, stamina, health, summonslots): #adding items to inventory
+    if item_id in inv:
+        inv[item_id]['quantity'] += quantity
+        print(f"Added {quantity} more of {name}.")
+    else:
+        inv[item_id] = {'name': name, 'quantity': quantity, 'value': value, 'power' : power, 'mana' : mana, 'stamina': stamina, 'summon slots':summonslots}
+        print(f"Picked up a new item: {name}.")
+def removeitem(inv, item_id, quantity): #REMOVE ITEM FROM INVENTORY
+    if item_id in inv:
+        if inv[item_id]['quantity'] >= quantity:
+            inv[item_id]['quantity'] -= quantity
+            if inv[item_id]['quantity'] == 0:
+                del inv[item_id]
+            print(f"Used {quantity} of {inventory[item_id]['name']}.")
+        else:
+            print("Not enough of this item.")
+    else:
+        print("Item not found in inventory.")
 # Global variables
 health = 100
 stamina = 100
@@ -22,11 +39,30 @@ power = 0
 summonslots = 0
 spec = "none"
 name = ""
-inv = {"health potion" : 3}
+equipeditems = {
+
+}
+inv = {
+}#PLAYER INVENTORY
+#MAKE IT SO ONLY CERTAIN ITEMS ARE EQUIPABLEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+
 def inventory():
-    global inv
-    print("inventory")
-    print(inv)
+    print("Inventory:")
+    for item_id, details in inv.items():
+        name = details['name']
+        quantity = details['quantity']
+        value = details['value']
+        print(f"Name: {name}, Quantity: {quantity}, Value: {value}")
+    invquestion = input("Would you like to 'Go Back', 'Equip', or 'Use'").lower().strip()
+    if invquestion == "go back":
+        mainplaymenu()
+    if invquestion == "Equip":
+        pass #WORK ON THESEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+    if invquestion == "Use":
+        pass
+    else:
+        print("invalid input, 'Go Back', 'Equip', or 'Use'")
+        
 def quests():
     print("quests")
 def stats():
@@ -200,21 +236,25 @@ def startofadventure():
     time.sleep(sleep_short)
     starttt = False
     while not starttt:
-        print("This is the start of your journey, are you sure you want that class for the rest of it?")
+        print("This is the start of your journey, are you sure you want that class for the rest of it?")#inv, item_id, name, quantity, value, power, mana, stamina, health, summonslots
         finalizeclass = input("Yes or No ").strip().lower()
         if finalizeclass == "yes":
             if spec == "necromancer":
-                inv["Minor Staff of the Undead"] = 1
-                inv["Minor Black Robe"] = 1
-                inv["Tome of Necromancy"] = 1
+                additem(inv, "SHstaff", "Minor Staff of the Undead", 1, 100, 5, 15, 5, 0, 0)
+                additem(inv, "robe", "Shoddy Black Robe", 1, 15, 0, 50, 5, 50, 0)
+                additem(inv, "SHtome", "Common Tome of Necromancy", 1, 0, 0, 0, 0, 0, 1)
+                additem(inv, "Potion", "Lesser Mana Potion", 3, 25, 0, 0, 0, 0, 0)
+                additem(inv, "Potion", "Lesser Healing Potion", 2, 20, 0, 0, 0, 0, 0)
                 starttt = True
-            if spec == "brawler":
-                inv["Stone Cestus"] = 1
-                inv["Fighters Wraps"] = 1
-                inv["Leather Patchwork Armor"] = 1
+            elif spec == "brawler":
+                additem(inv, "BHweapon", "Cracked Stone Cestus", 1, 12, 25, 0, -12, 15, 0)
+                additem(inv, "Arms", "Fighters Wraps", 1, 15, 10, 0, 25, 10, 0)
+                additem(inv, "Armor", "Leather Patchwork Armor", 1, 100, 0, 0, 10, 100, 0)
+                additem(inv, "Potion", "Lesser Healing Potion", 5, 20, 0, 0, 0, 0, 0)
                 starttt = True
-            if spec == "warlock":
-                inv[ #KEEPWORKING ON THIS HEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+            elif spec == "warlock":
+                 #KEEPWORKING ON THIS HEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+                pass
         elif finalizeclass == "no":
             time.sleep(sleep_short)
             print("choose well friend")
