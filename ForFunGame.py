@@ -7,18 +7,19 @@ sleep_duration = random.uniform(2, 4)
 sleep_long = random.uniform(5, 7)
 
 class colors:
-    RED = '\033[91m' #mythic
-    GREEN = '\033[92m'#uncommon
-    YELLOW = '\033[93m'#legendary
-    BLUE = '\033[94m' #rare
-    MAGENTA = '\033[95m'#quest item
+    mythic = '\033[91m' #red
+    uncommon = '\033[92m'#green
+    legendary = '\033[93m'#yellow
+    rare = '\033[94m' #blue
+    quest = '\033[95m'#purple
+    common = '\033[97m' #white
     END = '\033[0m'
-def additem(inv, item_id, name, quantity, value, power, mana, stamina, health, summonslots): #adding items to inventory
+def additem(inv, item_id, name, quantity, value, power, mana, stamina, health, summonslots, equipable, equiped, rarity): #adding items to inventory
     if item_id in inv:
         inv[item_id]['quantity'] += quantity
         print(f"Added {quantity} more of {name}.")
     else:
-        inv[item_id] = {'name': name, 'quantity': quantity, 'value': value, 'power' : power, 'mana' : mana, 'stamina': stamina, 'summon slots':summonslots}
+        inv[item_id] = {'name': name, 'quantity': quantity, 'value': value, 'power' : power, 'mana' : mana, 'stamina': stamina, 'summon slots':summonslots, 'equipable?': equipable, 'equiped?': equiped, 'rarity': rarity}
         print(f"Picked up a new item: {name}.")
 def removeitem(inv, item_id, quantity): #REMOVE ITEM FROM INVENTORY
     if item_id in inv:
@@ -44,7 +45,7 @@ equipeditems = {
 }
 inv = {
 }#PLAYER INVENTORY
-#MAKE IT SO ONLY CERTAIN ITEMS ARE EQUIPABLEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+
 
 def inventory():
     print("Inventory:")
@@ -52,7 +53,8 @@ def inventory():
         name = details['name']
         quantity = details['quantity']
         value = details['value']
-        print(f"Name: {name}, Quantity: {quantity}, Value: {value}")
+        rarity = details['rarity']
+        print(f"Name: {colors.{rarity}}{name}{colors.END}, Quantity: {quantity}, Value: {value}, Rarity: {rarity}") #BUGFIX THE RARITYRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
     invquestion = input("Would you like to 'Go Back', 'Equip', or 'Use'").lower().strip()
     if invquestion == "go back":
         mainplaymenu()
@@ -70,9 +72,29 @@ def stats():
 def town():
     print("town")
 def gear():
-    print("gear")
+    print("Equiped Gear:")
+    for item_id, details in equipeditems.items():
+        name = details['name']
+        health = details['health']
+        power = details['power']
+        mana = details['power']
+        stamina = details['stamina']
+        summonslots = details['summonslots']
+        print(name)
+        if details['health'] >1:
+            print('+' + health + ' Health')
+            
+        if details['health'] <1:
+            print('-' + health + ' Health')
+            
+        if details['power'] >1:
+            print('+' + power + ' Power')
+            
+        if details['power'] <1:
+            print('-' + power + ' Power')
+            
 def mainplaymenu():
-    main = ("inventory", "quests", "stats", "Look around", "gear")
+    main = ("inventory", "quests", "stats", "Look around", "Equiped Gear")
     print(main)
     selectedinmenu = False
     while selectedinmenu is not True:
@@ -236,21 +258,21 @@ def startofadventure():
     time.sleep(sleep_short)
     starttt = False
     while not starttt:
-        print("This is the start of your journey, are you sure you want that class for the rest of it?")#inv, item_id, name, quantity, value, power, mana, stamina, health, summonslots
+        print("This is the start of your journey, are you sure you want that class for the rest of it?")#inv, item_id, name, quantity, value, power, mana, stamina, health, summonslots, equiped, equipable, rarity
         finalizeclass = input("Yes or No ").strip().lower()
         if finalizeclass == "yes":
             if spec == "necromancer":
-                additem(inv, "SHstaff", "Minor Staff of the Undead", 1, 100, 5, 15, 5, 0, 0)
-                additem(inv, "robe", "Shoddy Black Robe", 1, 15, 0, 50, 5, 50, 0)
-                additem(inv, "SHtome", "Common Tome of Necromancy", 1, 0, 0, 0, 0, 0, 1)
-                additem(inv, "Potion", "Lesser Mana Potion", 3, 25, 0, 0, 0, 0, 0)
-                additem(inv, "Potion", "Lesser Healing Potion", 2, 20, 0, 0, 0, 0, 0)
+                additem(inv, "SHstaff", "Minor Staff of the Undead", 1, 100, 5, 15, 5, 0, 0,'yes','no', 'uncommon')
+                additem(inv, "robe", "Shoddy Black Robe", 1, 15, 0, 50, 5, 50, 0,'yes','no', 'common')
+                additem(inv, "SHtome", "Common Tome of Necromancy", 1, 0, 0, 0, 0, 0, 1,'yes','no', 'common')
+                additem(inv, "Potion", "Lesser Mana Potion", 3, 25, 0, 0, 0, 0, 0,'no','no', 'uncommon')
+                additem(inv, "Potion", "Lesser Healing Potion", 2, 20, 0, 0, 0, 0, 0,'no','no', 'common')
                 starttt = True
             elif spec == "brawler":
-                additem(inv, "BHweapon", "Cracked Stone Cestus", 1, 12, 25, 0, -12, 15, 0)
-                additem(inv, "Arms", "Fighters Wraps", 1, 15, 10, 0, 25, 10, 0)
-                additem(inv, "Armor", "Leather Patchwork Armor", 1, 100, 0, 0, 10, 100, 0)
-                additem(inv, "Potion", "Lesser Healing Potion", 5, 20, 0, 0, 0, 0, 0)
+                additem(inv, "BHweapon", "Cracked Stone Cestus", 1, 12, 25, 0, -12, 15, 0,'yes','no', 'common')
+                additem(inv, "Arms", "Fighters Wraps", 1, 15, 10, 0, 25, 10, 0,'yes','no', 'uncommon')
+                additem(inv, "Armor", "Leather Patchwork Armor", 1, 100, 0, 0, 10, 100, 0,'yes','no', 'common')
+                additem(inv, "Potion", "Lesser Healing Potion", 5, 20, 0, 0, 0, 0, 0,'no','no', 'common')
                 starttt = True
             elif spec == "warlock":
                  #KEEPWORKING ON THIS HEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
