@@ -6,28 +6,31 @@ sleep_short = random.uniform(1, 2)
 sleep_duration = random.uniform(2, 4)
 sleep_long = random.uniform(5, 7)
 
-class colors:
-    mythic = '\033[91m' #red
-    uncommon = '\033[92m'#green
-    legendary = '\033[93m'#yellow
-    rare = '\033[94m' #blue
-    quest = '\033[95m'#purple
-    common = '\033[97m' #white
+class color:
+    RED = '\033[91m' #red
+    GREEN = '\033[92m'#green
+    YELLOW = '\033[93m'#yellow
+    BLUE = '\033[94m' #blue
+    MAGENTA = '\033[95m'#purple
+    WHITE = '\033[97m' #white
     END = '\033[0m'
 def additem(inv, item_id, name, quantity, value, power, mana, stamina, health, summonslots, equipable, equiped, rarity): #adding items to inventory
+    color_code = colorcode(rarity)
     if item_id in inv:
         inv[item_id]['quantity'] += quantity
-        print(f"Added {quantity} more of {name}.")
+        print(f"Added {quantity} more of {color_code}{name}{color.END}.")
     else:
-        inv[item_id] = {'name': name, 'quantity': quantity, 'value': value, 'power' : power, 'mana' : mana, 'stamina': stamina, 'summon slots':summonslots, 'equipable?': equipable, 'equiped?': equiped, 'rarity': rarity}
-        print(f"Picked up a new item: {name}.")
+        inv[item_id] = {'name': name, 'quantity': quantity, 'value': value, 'power' : power, 'mana' : mana, 'stamina': stamina, 'health' : health, 'summon slots':summonslots, 'equipable?': equipable, 'equiped?': equiped, 'rarity': rarity}
+        print(f"Picked up a new item: {color_code}{name}{color.END}")
 def removeitem(inv, item_id, quantity): #REMOVE ITEM FROM INVENTORY
+    rarity = inv[item_id]['rarity']
+    color_code = colorcode(rarity)
     if item_id in inv:
         if inv[item_id]['quantity'] >= quantity:
             inv[item_id]['quantity'] -= quantity
             if inv[item_id]['quantity'] == 0:
                 del inv[item_id]
-            print(f"Used {quantity} of {inventory[item_id]['name']}.")
+            print(f"Used {quantity} of {color_code}{inventory[item_id]['name']}{color.END}.")
         else:
             print("Not enough of this item.")
     else:
@@ -45,7 +48,16 @@ equipeditems = {
 }
 inv = {
 }#PLAYER INVENTORY
-
+def colorcode(rarity):
+    color_map = {
+        'mythic': color.RED,
+        'uncommon': color.GREEN,
+        'legendary': color.YELLOW,
+        'rare': color.BLUE,
+        'quest': color.MAGENTA,
+        'common': color.WHITE
+    }
+    return color_map.get(rarity.lower(), color.END)
 
 def inventory():
     print("Inventory:")
@@ -54,13 +66,14 @@ def inventory():
         quantity = details['quantity']
         value = details['value']
         rarity = details['rarity']
-        print(f"Name: {colors.{rarity}}{name}{colors.END}, Quantity: {quantity}, Value: {value}, Rarity: {rarity}") #BUGFIX THE RARITYRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
+        color_code = colorcode(rarity)  # Get the color code for the rarity
+        print(f"Name: {color_code}{name}{color.END}, Quantity: {quantity}, Value: {value}, Rarity: {rarity}")
     invquestion = input("Would you like to 'Go Back', 'Equip', or 'Use'").lower().strip()
     if invquestion == "go back":
         mainplaymenu()
-    if invquestion == "Equip":
-        pass #WORK ON THESEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
-    if invquestion == "Use":
+    elif invquestion == "Equip":
+        pass
+    elif invquestion == "Use":
         pass
     else:
         print("invalid input, 'Go Back', 'Equip', or 'Use'")
@@ -72,29 +85,52 @@ def stats():
 def town():
     print("town")
 def gear():
+    global health, stamina, mana, power, summonslots, spec
     print("Equiped Gear:")
+    print(f"Power:{power} Health:{health} Mana:{mana} Stamina:{stamina}")
+    if spec == "necromancer":
+        print(f"Summon Slots: {summonslots}")
     for item_id, details in equipeditems.items():
         name = details['name']
         health = details['health']
         power = details['power']
-        mana = details['power']
+        mana = details['mana']
         stamina = details['stamina']
         summonslots = details['summonslots']
         print(name)
         if details['health'] >1:
             print('+' + health + ' Health')
             
-        if details['health'] <1:
+        elif details['health'] <0:
             print('-' + health + ' Health')
             
-        if details['power'] >1:
+        elif details['power'] >1:
             print('+' + power + ' Power')
             
-        if details['power'] <1:
+        elif details['power'] <0:
             print('-' + power + ' Power')
             
+        elif details['mana'] >1:
+            print('+' + mana + 'Mana')
+
+        elif details['mana'] <0:
+            print('-' + mana + 'Mana')
+
+        elif details['stamina'] >1:
+            print('+' + stamina + 'Stamina')
+
+        elif details['stamina'] <0:
+            print('-' + stamina + 'Stamina')
+
+        elif details['summonslots'] >1:
+            print('+' + summonslots + 'Summon Slots')
+
+        elif details['summonslots'] <0:
+            print('-' + summonslots + 'Summon Slots')
+            
+            
 def mainplaymenu():
-    main = ("inventory", "quests", "stats", "Look around", "Equiped Gear")
+    main = ("inventory", "quests", "stats", "Look around", "Equips")
     print(main)
     selectedinmenu = False
     while selectedinmenu is not True:
@@ -111,7 +147,7 @@ def mainplaymenu():
         elif navigateinv == "look around":
             town()
             selectedinmenu = True
-        elif navigateinv == "gear":
+        elif navigateinv == "equips":
             gear()
             selectedinmenu = True
         else:
@@ -244,7 +280,7 @@ def youchose():
     if summonslots >= 1:
         print("You have " + str(summonslots) + " summon slot(s).")
 def readstats():
-    time.sleep(sleep_long)
+    time.sleep(sleep_duration)
     readd = False
     while not readd:
         read = input("have you read your stats? ").strip().lower()
