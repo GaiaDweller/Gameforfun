@@ -59,6 +59,125 @@ def colorcode(rarity):
     }
     return color_map.get(rarity.lower(), color.END)
 
+def equipitems():
+    for item_id, details in inv.items():
+        name = details['name']
+        health = details['health']
+        power = details['power']
+        mana = details['mana']
+        stamina = details['stamina']
+        summonslots = details['summonslots']
+        print({color_code}name{color.END})
+        if details['health'] >1:
+            print('+' + health + ' Health')
+            
+        elif details['health'] <0:
+            print('-' + health + ' Health')
+            
+        elif details['power'] >1:
+            print('+' + power + ' Power')
+            
+        elif details['power'] <0:
+            print('-' + power + ' Power')
+            
+        elif details['mana'] >1:
+            print('+' + mana + 'Mana')
+
+        elif details['mana'] <0:
+            print('-' + mana + 'Mana')
+
+        elif details['stamina'] >1:
+            print('+' + stamina + 'Stamina')
+
+        elif details['stamina'] <0:
+            print('-' + stamina + 'Stamina')
+
+        elif details['summonslots'] >1:
+            print('+' + summonslots + 'Summon Slots')
+
+        elif details['summonslots'] <0:
+            print('-' + summonslots + 'Summon Slots')
+    whatwantequip = input("What would you like to Equip?")
+    itemtoequip = None
+    for item_id, details in inv.items():
+        if details['name'] == whatwantequip:
+            itemtoequip = item_id
+            break
+    if itemtoequip:
+        item_details = inv.pop(itemtoequip)
+        equipeditems[itemtoequip] = item_details
+        print(f"Equipped {item_details['name']}.")
+    else:
+        print("Item not found in inventory.")
+    
+    if item_id in equipeditems.items():
+        for details in item_id:
+            global health, stamina, mana, power, summonslots, spec
+            name = details['name']
+            itemhealth = details['health']
+            itempower = details['power']
+            itemmana = details['mana']
+            itemstamina = details['stamina']
+            itemsummonslots = details['summonslots']
+            health = health + itemhealth
+            stamina = stamina + itemstamina
+            mana = mana + itemmana
+            power = power + itempower
+            if spec == "necromancer":
+                summonslots = summonslots + itemsummonslots  #THIS NEEDS A LOT OF WORK DONE ON IT KEEP WORKING ON IT MAKE SURE TO ASK IT TO MAKE IT SO IT CAN ONLY BE ADDED ONCE
+        
+        
+def unequipitems():
+    for item_id, details in equipeditems.items():
+        name = details['name']
+        health = details['health']
+        power = details['power']
+        mana = details['mana']
+        stamina = details['stamina']
+        summonslots = details['summonslots']
+        print({color_code}name{color.END})
+        if details['health'] >1:
+            print('+' + health + ' Health')
+            
+        elif details['health'] <0:
+            print('-' + health + ' Health')
+            
+        elif details['power'] >1:
+            print('+' + power + ' Power')
+            
+        elif details['power'] <0:
+            print('-' + power + ' Power')
+            
+        elif details['mana'] >1:
+            print('+' + mana + 'Mana')
+
+        elif details['mana'] <0:
+            print('-' + mana + 'Mana')
+
+        elif details['stamina'] >1:
+            print('+' + stamina + 'Stamina')
+
+        elif details['stamina'] <0:
+            print('-' + stamina + 'Stamina')
+
+        elif details['summonslots'] >1:
+            print('+' + summonslots + 'Summon Slots')
+
+        elif details['summonslots'] <0:
+            print('-' + summonslots + 'Summon Slots')
+    whatwantunequip = input("What would you like to Unequip?")
+    itemtounequip = None
+    for item_id, details in equipeditems.items():
+        if details['name'] == whatwantunequip:
+            itemtounequip = item_id
+            break
+    if itemtounequip:
+        item_details = equipeditems.pop(itemtounequip)
+        inv[itemtounequip] = item_details
+        print(f"Unequipped {item_details['name']}.")
+    else:
+        print("Item not found.")
+    
 def inventory():
     print("Inventory:")
     for item_id, details in inv.items():
@@ -72,7 +191,7 @@ def inventory():
     if invquestion == "go back":
         mainplaymenu()
     elif invquestion == "Equip":
-        pass
+        equipitems()
     elif invquestion == "Use":
         pass
     else:
@@ -81,13 +200,30 @@ def inventory():
 def quests():
     print("quests")
 def stats():
-    print("stats")
+    global health, stamina, mana, power, summonslots, spec
+    print(f'''Spec: {spec.capitalize()}
+Power:{power}
+Health:{health}
+Mana:{mana}
+Stamina:{stamina}''')
+    returnfromstats = input("Type 'yes' if you have read your stats")
+    if returnfromstats == 'yes':
+        mainplaymenu()
+    if returnfromstats == 'adminadminadminnocheatingguys':
+        mainplaymenu()
+    else:
+        print("invalid input, type 'yes' if you would like to return")
+    if spec == "necromancer":
+        print(f"Summon Slots: {summonslots}")
 def town():
     print("town")
 def gear():
     global health, stamina, mana, power, summonslots, spec
     print("Equiped Gear:")
-    print(f"Power:{power} Health:{health} Mana:{mana} Stamina:{stamina}")
+    print(f'''Power:{power}
+Health:{health}
+Mana:{mana}
+Stamina:{stamina}''')
     if spec == "necromancer":
         print(f"Summon Slots: {summonslots}")
     for item_id, details in equipeditems.items():
@@ -97,7 +233,7 @@ def gear():
         mana = details['mana']
         stamina = details['stamina']
         summonslots = details['summonslots']
-        print(name)
+        print({color_code}name{color.END})
         if details['health'] >1:
             print('+' + health + ' Health')
             
@@ -301,14 +437,14 @@ def startofadventure():
                 additem(inv, "SHstaff", "Minor Staff of the Undead", 1, 100, 5, 15, 5, 0, 0,'yes','no', 'uncommon')
                 additem(inv, "robe", "Shoddy Black Robe", 1, 15, 0, 50, 5, 50, 0,'yes','no', 'common')
                 additem(inv, "SHtome", "Common Tome of Necromancy", 1, 0, 0, 0, 0, 0, 1,'yes','no', 'common')
-                additem(inv, "Potion", "Lesser Mana Potion", 3, 25, 0, 0, 0, 0, 0,'no','no', 'uncommon')
-                additem(inv, "Potion", "Lesser Healing Potion", 2, 20, 0, 0, 0, 0, 0,'no','no', 'common')
+                additem(inv, "Consumable", "Lesser Mana Potion", 3, 25, 0, 50, 0, 0, 0,'no','no', 'uncommon')
+                additem(inv, "Potion", "Lesser Healing Potion", 2, 20, 0, 0, 0, 50, 0,'no','no', 'common')
                 starttt = True
             elif spec == "brawler":
                 additem(inv, "BHweapon", "Cracked Stone Cestus", 1, 12, 25, 0, -12, 15, 0,'yes','no', 'common')
                 additem(inv, "Arms", "Fighters Wraps", 1, 15, 10, 0, 25, 10, 0,'yes','no', 'uncommon')
                 additem(inv, "Armor", "Leather Patchwork Armor", 1, 100, 0, 0, 10, 100, 0,'yes','no', 'common')
-                additem(inv, "Potion", "Lesser Healing Potion", 5, 20, 0, 0, 0, 0, 0,'no','no', 'common')
+                additem(inv, "Potion", "Lesser Healing Potion", 5, 20, 0, 0, 0, 50, 0,'no','no', 'common')
                 starttt = True
             elif spec == "warlock":
                  #KEEPWORKING ON THIS HEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
