@@ -140,33 +140,50 @@ def equipitems():
         else:
             print("Item not found in inventory.")
 
+
 def update_weapon_slots():
     global equipeditems
+    
+    # Scenario 1 & 2: If only WeaponLeft or WeaponRight has an item, make WeaponBoth full
+    if (equipeditems['WeaponLeft'] and not equipeditems['WeaponRight']) or (equipeditems['WeaponRight'] and not equipeditems['WeaponLeft']):
+        if not equipeditems['WeaponBoth']:
+            equipeditems['WeaponBoth'] = FORWEAPONS['FullBoth']
 
-    # Ensure weapon slots are initialized
-    if 'WeaponBoth' not in equipeditems:
-        equipeditems['WeaponBoth'] = None
-    if 'WeaponRight' not in equipeditems:
-        equipeditems['WeaponRight'] = None
-    if 'WeaponLeft' not in equipeditems:
+    # Scenario 3: If WeaponBoth is full, placehold both single slots
+    if equipeditems['WeaponBoth'] and equipeditems['WeaponBoth'] != FORWEAPONS['FullBoth']:
+        if not equipeditems['WeaponLeft']:
+            equipeditems['WeaponLeft'] = FORWEAPONS['FullLeft']
+        if not equipeditems['WeaponRight']:
+            equipeditems['WeaponRight'] = FORWEAPONS['FullRight']
+
+    # Scenario 4: If both WeaponLeft and WeaponRight are equipped, make WeaponBoth full
+    if equipeditems['WeaponLeft'] and equipeditems['WeaponRight']:
+        if not equipeditems['WeaponBoth']:
+            equipeditems['WeaponBoth'] = FORWEAPONS['FullBoth']
+
+    # Scenario 5: If no weapons are equipped, there should be no placeholders
+    if not equipeditems['WeaponLeft'] and not equipeditems['WeaponRight'] and not equipeditems['WeaponBoth']:
         equipeditems['WeaponLeft'] = None
-
-    # Update 'WeaponBoth' based on 'WeaponRight' or 'WeaponLeft'
-    if equipeditems['WeaponRight'] or equipeditems['WeaponLeft']:
-        # At least one weapon is equipped, so set 'WeaponBoth' to the full weapon
-        equipeditems['WeaponBoth'] = FORWEAPONS.get('FullBoth', None)
-    else:
-        # No weapons are equipped, so 'WeaponBoth' should be None
+        equipeditems['WeaponRight'] = None
         equipeditems['WeaponBoth'] = None
 
-    # Ensure no duplicates and correct assignment
-    if equipeditems['WeaponRight'] or equipeditems['WeaponLeft']:
-        equipeditems['WeaponBoth'] = FORWEAPONS.get('FullBoth', None)
-    else:
-        if equipeditems['WeaponLeft'] == None and equipeditems['WeaponRight'] == None:
+    # Scenario 6: If WeaponBoth doesn't have a weapon, then both single slots shouldn't have a placeholder
+    if not equipeditems['WeaponBoth']:
+        if equipeditems['WeaponLeft'] == FORWEAPONS['FullLeft']:
+            equipeditems['WeaponLeft'] = None
+        if equipeditems['WeaponRight'] == FORWEAPONS['FullRight']:
+            equipeditems['WeaponRight'] = None
+
+    # Scenario 7: If WeaponBoth is full and both single slots are empty, reset WeaponBoth to empty
+    if equipeditems['WeaponBoth'] == FORWEAPONS['FullBoth']:
+        if not equipeditems['WeaponLeft'] and not equipeditems['WeaponRight']:
             equipeditems['WeaponBoth'] = None
-
-
+    if (equipeditems['WeaponLeft'] == FORWEAPONS['FullLeft'] and
+    equipeditems['WeaponRight'] == FORWEAPONS['FullRight'] and
+    equipeditems['WeaponBoth'] == FORWEAPONS['FullBoth']):
+        equipeditems['WeaponLeft'] = None
+        equipeditems['WeaponRight'] = None
+        equipeditems['WeaponBoth'] = None
 def updatestatsforequips():
     global health, stamina, mana, power, summonslots, spec
     health_increase = 0
@@ -182,8 +199,6 @@ def updatestatsforequips():
             mana_increase += item.get('mana', 0)
             power_increase += item.get('power', 0)
             summonslots_increase += item.get('summonslots', 0)
-        else:
-            print(f"Warning: Expected dictionary for item in slot {slot}, got {type(item)} instead.")
 
     health += health_increase
     stamina += stamina_increase
@@ -275,12 +290,16 @@ def unequipitems():
     itemtounequip = None
 
     for slot, item in equipeditems.items():
+        if item is None:
+            continue  # Skip if the item is None
+        
         if slot == "ring":
-            for ring in item:
-                if ring.get('name', '').lower() == whatwantunequip:
-                    itemtounequip = ring
-                    item['ring'].remove(ring)
-                    break
+            if isinstance(item, list):  # Ensure item is a list before iterating
+                for ring in item:
+                    if ring and ring.get('name', '').lower() == whatwantunequip:
+                        itemtounequip = ring
+                        item.remove(ring)
+                        break
         else:
             if item.get('name', '').lower() == whatwantunequip:
                 itemtounequip = item
@@ -299,10 +318,12 @@ def unequipitems():
         inventory()
     else:
         print("Item not found.")
+    
     update_weapon_slots()
-    unequipitems()
-
+    inventory()
+    
 def inventory():
+    update_weapon_slots()
     global equipeditems, inv
     print("\nEquipped Items:")
     for slot, item in equipeditems.items():
@@ -430,25 +451,25 @@ Stamina: {stamina}''')
             print("Type 'Yes' if you have seen your gear")
             
 def mainplaymenu():
-    main = ("inventory", "quests", "stats", "Look around", "gear")
+    main = ("(I)nventory", "(Q)uests", "(S)tats", "(L)ook around", "(G)ear")
     print(main)
     selectedinmenu = False
     while selectedinmenu is not True:
         navigateinv = input("where would you like to go?").strip().lower()
-        if navigateinv == "inventory":
+        if navigateinv == "i":
             inventory()
             update_weapon_slots()
             selectedinmenu = True
-        elif navigateinv == "quests":
+        elif navigateinv == "q":
             quests()
             selectedinmenu = True
-        elif navigateinv == "stats":
+        elif navigateinv == "s":
             stats()
             selectedinmenu = True
-        elif navigateinv == "look around":
+        elif navigateinv == "l":
             town()
             selectedinmenu = True
-        elif navigateinv == 'gear':
+        elif navigateinv == 'g':
             gear()
         else:
             print("invalid input, choose one of these options:")
