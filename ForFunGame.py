@@ -5,6 +5,7 @@ import time
 sleep_short = random.uniform(1, 2)
 sleep_duration = random.uniform(2, 4)
 sleep_long = random.uniform(5, 7)
+sleep_huge = random.uniform(7, 12)
 
 class Color:
     RED = '\033[91m'   # red
@@ -63,8 +64,10 @@ currenthealth = 0
 currentstamina = 0
 currentmana = 0
 opensummonslots = 0
+firsttimeinmildew = 0
 spec = "none"
 name = ""
+town = ""
 unequipeditems = {}
 newequipeditems ={}
 equipeditems = {
@@ -86,6 +89,7 @@ FORWEAPONS = {
             'stamina': 0, 'health': 0, 'summonslots': 0, 'equipable': 'yes',
             'rarity': 'common', 'slot': 'WeaponBoth'},
     }
+NecromancerSummons = {}
 
 def display_item_stats(item):
     name = item.get('name', 'Unknown')
@@ -418,27 +422,30 @@ def useitem():
     
     if item_to_use:
         item_id, details = item_to_use
-        healthtoadd = details.get('health', 0)
-        staminatoadd = details.get('stamina', 0)
-        manatoadd = details.get('mana', 0)
-        
-        currenthealth += healthtoadd
-        currentstamina += staminatoadd
-        currentmana += manatoadd
-        
-        removeitem(inv, item_id, 1)
-        
-        checkcurrentstats()
-        
-        if healthtoadd > 0:
-            print(f"+ {healthtoadd} health")
-        if manatoadd > 0:
-            print(f"+{manatoadd} mana")
-        if staminatoadd > 0:
-            print(f"+{staminatoadd} stamina")
-        
-        time.sleep(sleep_short)
-        inventory()
+        if details.get('consumable') == 'yes':
+            healthtoadd = details.get('health', 0)
+            staminatoadd = details.get('stamina', 0)
+            manatoadd = details.get('mana', 0)
+            
+            currenthealth += healthtoadd
+            currentstamina += staminatoadd
+            currentmana += manatoadd
+            
+            removeitem(inv, item_id, 1)
+            
+            checkcurrentstats()
+            
+            if healthtoadd > 0:
+                print(f"+ {healthtoadd} health")
+            if manatoadd > 0:
+                print(f"+{manatoadd} mana")
+            if staminatoadd > 0:
+                print(f"+{staminatoadd} stamina")
+            
+            time.sleep(sleep_short)
+            inventory()
+        else:
+            print('That is not a consumable.')
     else:
         print("Invalid input, please type the item's name.")
 
@@ -468,9 +475,103 @@ Stamina: {currentstamina}/{stamina}''')
             jsajsdajklsajkl = True
         else:
             print("invalid input, type 'yes' if you would like to return")
+def currenttown():
+    global town, firsttimeinmildew
+    if town == 'Mildew':
+        if firsttimeinmildew > 0:
+            mildewvillagesquare()
+        if firsttimeinmildew == 0:
+            firsttimeinmildew += 1
+            mildewvillagetownstart()
 
-def town():
-    print("town")
+def mildewvillagesquare():
+    time.sleep(sleep_duration)
+    print("(J)ohn's Butcher Shop, (A)lley, (S)mall garden, (O)ld Widow Edna's House, (F)orest, (P)layer Menu")
+    wheregoinmildew = input("Where do you go?").lower().strip()
+    while wheregoinmildew:
+        if wheregoinmildew == 'j':
+            Johnmildewshop()
+        if wheregoinmildew == 'a':
+            mildewalley()
+        if wheregoinmildew == 's':
+            mildewsmallgarden()
+        if wheregoinmildew == 'o':
+            ednashome()
+        if wheregoinmildew == 'f':
+            mildewforest()
+        if wheregoinmildew == 'p':
+            mainplaymenu()
+        else:
+            print('invalid input, try again.')
+def johnsdadjokes():
+    pickjoke = random.uniform(1,5)
+    if pickjoke == 1:
+        print('What kind of underpants do lawyers wear?')
+        time.sleep(sleep_short)
+        print('BRIEFS!!! HOH HOH HOH!!')
+        Johnmildewshop()
+    if pickjoke == 2:
+        print('What do you call it when a cow grows facial hair?')
+        time.sleep(sleep_short)
+        print('A MOOOOOO-STACHE! HOH HOH HOH!')
+        Johnmildewshop()
+    if pickjoke == 3:
+        print('Did you hear about the two rowboats that got into an argument?')
+        time.sleep(sleep_short)
+        print('it was a real OAR DEAL! HOH HOH!')
+        Johnmildewshop()
+    if pickjoke == 4:
+        print("There are only two things I don't eat for breakfast")
+        time.sleep(sleep_short)
+        print('Lunch and Dinner! HOH HOH HOH!')
+        Johnmildewshop()
+    if pickjoke == 5:
+        print('I adopted a dog from a blacksmith')
+        time.sleep(sleep_short)
+        print('As soon as i brought him home he made a bolt for the door... HOH HOH HOH!')
+        Johnmildewshop()
+    
+firsttimeinjohns = 0
+def Johnmildewshop():
+    global firsttimeinjohns
+    if firsttimeinjohns == 0:
+        print("You enter John's Butcher Shop, this man is like a second father to you, he would always keep you fed when you were hungry and saved your life on multiple occasions.")
+        firsttimeinjohns += 1
+    time.sleep(sleep_huge)
+    print("John: HOH! HOH! HOH!")
+    time.sleep(sleep_duration)
+    print("John: What can I do you fer kid?")
+    Johnquestion = input("(W)anna talk?, (A)nything you need done?, (T)ell me a joke please").strip().lower()
+    if johnquestion == 'w':
+        pass
+    if johnquestion == 'a':
+        pass
+    if johnquestion == 't':
+        johnsdadjokes()
+
+def mildewalley():
+    pass
+def mildewsmallgarden():
+    pass
+def ednashome():
+    pass
+def mildewforest():
+    pass
+
+def mildewvillagetownstart():
+    global spec
+    color_code_red = colorcode('mythic')
+    color_code_purple = colorcode('quest')
+    if spec == 'necromancer':
+        print(f"I could revive them, but it wouldnt fix it, they would just be {color_code_red}empty husks{color.END} of themselves that follow my every order, it would be wrong")
+        time.sleep(sleep_long)
+    print(f'''You exit your previously happy family home, that is now {color_code_red}tainted with the blood of your dead family members{Color.END}.
+           {color_code_purple}You lock the door and throw away the key{Color.END}, {color_code_red}never{Color.END} to return again.''')
+    time.sleep(sleep_huge)
+    print(f'You take a deep breath and take the first steps of your new life, a life of revenge, you look into the village square and see the faces of your young neighbors, {color_code_red}happy{Color.END}, you used to be like them.')
+    time.sleep(sleep_long)
+    print('You enter the village square, maybe you could earn some money before beginning your journey.')
+    mildewvillagesquare()
 def gear():
     global health, stamina, mana, power, summonslots, spec
     printhealth = health
@@ -550,7 +651,7 @@ def mainplaymenu():
             stats()
             selectedinmenu = True
         elif navigateinv == "l":
-            town()
+            currenttown()
             selectedinmenu = True
         elif navigateinv == 'g':
             gear()
@@ -582,12 +683,14 @@ def checkclass():
     readstats()
     startofadventure()
 def startofgame():
-    global health, stamina, mana, power, summonslots, spec
+    global health, stamina, mana, power, summonslots, spec, town, firsttimeinmildew
     health = 100
     stamina = 100
     mana = 100
     power = 0
     summonslots = 0
+    town = 'Mildew'
+    firsttimeinmildew = 0
     nameis()
     purpose()
     checkclass()
@@ -720,7 +823,6 @@ def startofadventure():
         if finalizeclass == "yes":
             if spec == "necromancer":
                 additem(inv, "SHstaff", "Minor Staff of the Undead", 1, 100, 5, 15, 5, 0, 0,'yes', 'uncommon', 'WeaponLeft', 'no')
-                additem(inv, "BHstaff", "TestBoth", 1, 100, 5, 15, 5, 0, 0,'yes', 'uncommon', 'WeaponBoth', 'no')
                 additem(inv, "robe", "Shoddy Black Robe", 1, 15, 0, 50, 5, 50, 0,'yes', 'common', 'Torso', 'no')
                 additem(inv, "SHtome", "Common Tome of Necromancy", 1, 0, 0, 10, 0, 0, 1,'yes', 'common', 'WeaponRight', 'no')
                 additem(inv, "LMPotion", "Lesser Mana Potion", 3, 25, 0, 50, 0, 0, 0,'no', 'uncommon', 'none', 'yes')
