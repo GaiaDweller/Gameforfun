@@ -54,6 +54,30 @@ def removeitem(inv, item_id, quantity):
     else:
         print("Item not found in inventory.")
 
+def addquest(questname, description, town):
+    global currentquests, completedquests
+    
+    if questname in completedquests:
+        print('You have already completed this quest.')
+    elif questname in currentquests:
+        print("You are currently doing this quest.")
+    else:
+        print(f'{questname} added to quests')
+        currentquests[questname] = {'Description': description, 'Location': town}
+
+def finishedquest(questname):
+    global currentquests, completedquests
+    
+    if questname in completedquests:
+        pass
+    elif questname in currentquests:
+        questdetails = currentquests.pop(questname)
+        completedquests[questname] = questdetails
+        print(f'Completed {questname}')
+    else:
+        print(f'{questname} is not in your current quests.')
+    
+
 # Global variables
 health = 0
 stamina = 0
@@ -65,9 +89,16 @@ currentstamina = 0
 currentmana = 0
 opensummonslots = 0
 firsttimeinmildew = 0
+firsttimeinjohns = 0
 spec = "none"
 name = ""
 town = ""
+againinjohns = ""
+Goddessname = 'Narukya'
+Darkgoddessname = 'Ire'
+takenjohnsblessing = 0
+completedquests = {}
+currentquests = {}
 unequipeditems = {}
 newequipeditems ={}
 equipeditems = {
@@ -453,7 +484,14 @@ def useitem():
 
 
 def quests():
-    print("You currently have no quests")
+    if len(currentquests) > 0:
+        for questname, details in currentquests.items():
+            description = details['Description']
+            town = details['Location']
+            print(f'{questname}: {description} in {town}')
+    else:
+        print('You have no quests currently')
+
     mainplaymenu()
 def stats():
     global health, stamina, mana, power, summonslots, spec
@@ -485,70 +523,226 @@ def currenttown():
             mildewvillagetownstart()
 
 def mildewvillagesquare():
-    time.sleep(sleep_duration)
-    print("(J)ohn's Butcher Shop, (A)lley, (S)mall garden, (O)ld Widow Edna's House, (F)orest, (P)layer Menu")
-    wheregoinmildew = input("Where do you go?").lower().strip()
-    while wheregoinmildew:
+    mildewgoto = True
+    while mildewgoto:
+        time.sleep(sleep_duration)
+        print("(J)ohn's Butcher Shop, (A)lley, (S)mall garden, (O)ld Widow Edna's House, (F)orest, (P)layer Menu")
+        wheregoinmildew = input("Where do you go?").lower().strip()
+        
         if wheregoinmildew == 'j':
+            mildewgoto = False
             Johnmildewshop()
-        if wheregoinmildew == 'a':
+        elif wheregoinmildew == 'a':
+            mildewgoto = False
             mildewalley()
-        if wheregoinmildew == 's':
+        elif wheregoinmildew == 's':
+            mildewgoto = False
             mildewsmallgarden()
-        if wheregoinmildew == 'o':
+        elif wheregoinmildew == 'o':
+            mildewgoto = False
             ednashome()
-        if wheregoinmildew == 'f':
+        elif wheregoinmildew == 'f':
+            mildewgoto = False
             mildewforest()
-        if wheregoinmildew == 'p':
+        elif wheregoinmildew == 'p':
+            mildewgoto = False
             mainplaymenu()
         else:
-            print('invalid input, try again.')
+            print("Where?")
 def johnsdadjokes():
-    pickjoke = random.uniform(1,5)
+    pickjoke = random.randint(1,5)
     if pickjoke == 1:
         print('What kind of underpants do lawyers wear?')
         time.sleep(sleep_short)
         print('BRIEFS!!! HOH HOH HOH!!')
+        time.sleep(sleep_short)
         Johnmildewshop()
     if pickjoke == 2:
         print('What do you call it when a cow grows facial hair?')
         time.sleep(sleep_short)
         print('A MOOOOOO-STACHE! HOH HOH HOH!')
+        time.sleep(sleep_short)
         Johnmildewshop()
     if pickjoke == 3:
         print('Did you hear about the two rowboats that got into an argument?')
         time.sleep(sleep_short)
         print('it was a real OAR DEAL! HOH HOH!')
+        time.sleep(sleep_short)
         Johnmildewshop()
     if pickjoke == 4:
         print("There are only two things I don't eat for breakfast")
         time.sleep(sleep_short)
         print('Lunch and Dinner! HOH HOH HOH!')
+        time.sleep(sleep_short)
         Johnmildewshop()
     if pickjoke == 5:
         print('I adopted a dog from a blacksmith')
         time.sleep(sleep_short)
         print('As soon as i brought him home he made a bolt for the door... HOH HOH HOH!')
+        time.sleep(sleep_short)
         Johnmildewshop()
-    
-firsttimeinjohns = 0
-def Johnmildewshop():
-    global firsttimeinjohns
-    if firsttimeinjohns == 0:
-        print("You enter John's Butcher Shop, this man is like a second father to you, he would always keep you fed when you were hungry and saved your life on multiple occasions.")
-        firsttimeinjohns += 1
-    time.sleep(sleep_huge)
-    print("John: HOH! HOH! HOH!")
+def talkingtojohn():
+    choosingjohnsblessing = True
+    global name, Goddessname, spec, power, health, stamina, mana, summonslots, takenjohnsblessing, againinjohns
+    color_code_purple = colorcode('quest')
+    print('John: Of course kid, i always have time for you')
+    time.sleep(sleep_short)
+    print(f'You explain {againinjohns}what happened to your family in detail to John...')
     time.sleep(sleep_duration)
-    print("John: What can I do you fer kid?")
-    Johnquestion = input("(W)anna talk?, (A)nything you need done?, (T)ell me a joke please").strip().lower()
-    if johnquestion == 'w':
+    print("John: so that what happened, I thought something was up when your parents hadn't come to my shop for over a week.")
+    time.sleep(sleep_duration)
+    print(f'John: Youre a good kid {name}, id hate it if something happened to you...')
+    if takenjohnsblessing == 0:
+        time.sleep(sleep_long)
+        print(f'John: You know, I have a small gift i could give you, although its not much, I used to be a priest of the goddess {Goddessname}')
+        time.sleep(sleep_long)
+        print(f'John: before you go on your journey i want to bestow upon you a {color_code_purple}blessing{Color.END}')
+        time.sleep(sleep_long)
+        print('John: Choose wisely kid...')
+        if spec == 'necromancer':
+            print('John: The Blessing of Power, The Blessing of Health, The Blessing of Endurance, The Blessing of Intelect')
+            time.sleep(sleep_long)
+            print('You feel something arise inside of you...')
+            time.sleep(sleep_long)
+            print('A goddess of darkness is contacting you...')
+            time.sleep(sleep_duration)
+            print("She offers you a 'blessing' of sorts, although you may want to be careful accepting it...If you accept she will alter the blessing from John...")
+            time.sleep(sleep_long)
+            print("John: You alright kid? Take as long as you want to decide, heres your options again kid.")
+            time.sleep(sleep_duration)
+        while choosingjohnsblessing:
+            print('Blessing of (P)ower, Blessing of (H)ealth, Blessing of (E)ndurance, Blessing of (I)ntelect')
+            if spec == 'necromancer':
+                print('(C)urse of a Black Heart')
+            johnsblessing = input('Which Blessing do you choose?').strip().lower()
+            if johnsblessing == 'p':
+                print('John: Dono vobis benedictionem magnae virtutis')
+                time.sleep(sleep_short)
+                print('John: Goodluck kid *John smiles softly*')
+                print('+5 Power')
+                power += 5
+                takenjohnsblessing += 1
+                againinjohns = 'again '
+                Johnmildewshop()
+                choosingjohnsblessing = False
+            elif johnsblessing == 'h':
+                print('John: Dono vobis benedictionem magnae salutis')
+                time.sleep(sleep_short)
+                print('John: Stay safe kid *John smirks softly*')
+                print('+20 Health')
+                health += 20
+                takenjohnsblessing += 1
+                againinjohns = 'again '
+                Johnmildewshop()
+                choosingjohnsblessing = False
+            elif johnsblessing == 'e':
+                print('John: Dono vobis benedictionem magnae patientiae')
+                time.sleep(sleep_short)
+                print('John: you going to run a marathon? HOH HOH!')
+                print('+25 Stamina')
+                stamina += 25
+                takenjohnsblessing += 1
+                againinjohns = 'again '
+                Johnmildewshop()
+                choosingjohnsblessing = False
+            elif johnsblessing == 'i':
+                print('John: Dono vobis benedictionem magni intellectus')
+                time.sleep(sleep_short)
+                print('John: Smart ass.. HOH HOH!')
+                print('+30 mana')
+                mana += 30
+                takenjohnsblessing += 1
+                againinjohns = 'again '
+                Johnmildewshop()
+                choosingjohnsblessing = False
+                
+            elif johnsblessing == 'c' and spec == 'necromancer':
+                print('John: Erat captionem, cav......')
+                time.sleep(sleep_short)
+                print('Johns voice becomes too faint to hear.')
+                time.sleep(sleep_duration)
+                print('You sit quietly for a moment, pondering your decision')
+                time.sleep(sleep_long)
+                print('Did i choose right?')
+                time.sleep(sleep_short)
+                print('A rippling pain pierces your chest, you feel as though your heart will explode...')
+                time.sleep(sleep_duration)
+                print(f'{Darkgoddessname}: *her voice pierces your ears like a sharp screech* YOU HAVE CHOSEN WISELY MORTAL')
+                time.sleep(sleep_long)
+                print('Johns voice comes back')
+                time.sleep(sleep_short)
+                print('John: You alright kid?')
+                time.sleep(sleep_short)
+                print('You: Yes.... i feel good...')
+                time.sleep(sleep_short)
+                print('John: If you say so kid, *John smiles weakly, a slight tear in his eye*')
+                time.sleep(sleep_duration)
+                print('+1 summonslot')
+                print('-35 Health')
+                health -= 35
+                summonslots += 1
+                takenjohnsblessing += 1
+                againinjohns = 'again '
+                Johnmildewshop()
+                choosingjohnsblessing = False
+                
+            else:
+                print('What blessing kid?')
+    else:
+        print('John: Im always here for you kid')
+        Johnmildewshop()
+def johnquest():
+    if 'Slime Hunting' not in currentquests and 'Slime Hunting' not in completedquests:
+        print('John: Matter of fact... Ive been needing some slime chunks for my furnace to cook the meat properly')
+        time.sleep(sleep_duration)
+        print('John: Would you mind gathering me 5 slime chunks? Ill pay you for it.')
+        acceptjohnquest = input('(Y)es or (N)o').strip().lower()
+        if acceptjohnquest == 'y':
+            addquest('Slime Hunting', 'John needs 5 slime chunks for his furnace', 'Mildew Village')
+            print('John: HOH! HOH! THANKS KID! YOURE A LIFE SAVER!')
+            time.sleep(sleep_duration)
+            Johnmildewshop()
+        if acceptjohnquest == 'n':
+            print('John: Well alrighty then, ill get another young chap to do it, offer still stands though')
+            time.sleep(sleep_duration)
+            Johnmildewshop()
+    elif 'Slime Hunting' in currentquests and 'Slime Hunting' not in completedquests:
         pass
-    if johnquestion == 'a':
-        pass
-    if johnquestion == 't':
-        johnsdadjokes()
+    else:
+        print('John: Thanks for those slime chunks, I dont have anything else I need right now')
 
+
+
+def Johnmildewshop():
+    askquestionjohn = True
+    checkcurrentstats()
+    while askquestionjohn:
+        global firsttimeinjohns
+        if firsttimeinjohns == 0:
+            print("You enter John's Butcher Shop, this man is like a second father to you, he would always keep you fed when you were hungry and saved your life on multiple occasions.")
+            firsttimeinjohns += 1
+            time.sleep(sleep_long)
+        
+        print("John: HOH! HOH! HOH!")
+        time.sleep(sleep_duration)
+        print("John: What cen I du you fer kid?")
+        johnquestion = input("(W)anna talk?, (A)nything you need done?, (T)ell me a joke please, (G)oodbye").strip().lower()
+        
+        if johnquestion == 'w':
+            talkingtojohn()
+            askquestionjohn = False
+        elif johnquestion == 'a':
+            johnquest()
+            askquestionjohn = False
+        elif johnquestion == 't':
+            johnsdadjokes()
+            askquestionjohn = False
+        elif johnquestion == 'g':
+            print("Yer always welcome, see ya kid")
+            currenttown()
+            askquestionjohn = False
+        else:
+            print("What was that kid? My ears aren't the same as they used to be... HOH HOH!")
 def mildewalley():
     pass
 def mildewsmallgarden():
@@ -563,7 +757,7 @@ def mildewvillagetownstart():
     color_code_red = colorcode('mythic')
     color_code_purple = colorcode('quest')
     if spec == 'necromancer':
-        print(f"I could revive them, but it wouldnt fix it, they would just be {color_code_red}empty husks{color.END} of themselves that follow my every order, it would be wrong")
+        print(f"I could revive them, but it wouldnt fix it, they would just be {color_code_red}empty husks{Color.END} of themselves that follow my every order, it would be wrong")
         time.sleep(sleep_long)
     print(f'''You exit your previously happy family home, that is now {color_code_red}tainted with the blood of your dead family members{Color.END}.
            {color_code_purple}You lock the door and throw away the key{Color.END}, {color_code_red}never{Color.END} to return again.''')
@@ -648,12 +842,14 @@ def mainplaymenu():
             quests()
             selectedinmenu = True
         elif navigateinv == "s":
+            checkcurrentstats()
             stats()
             selectedinmenu = True
         elif navigateinv == "l":
             currenttown()
             selectedinmenu = True
         elif navigateinv == 'g':
+            checkcurrentstats()
             gear()
         else:
             print("invalid input, choose one of these options:")
