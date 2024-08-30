@@ -26,6 +26,7 @@ firsttimeinmildew = 0
 firsttimeinjohns = 0
 firsttimegetjohnmeat = 0
 firsttimeinednas = 0
+ednagivingointment = 0
 Goddessname = 'Narukya'
 Darkgoddessname = 'Ire'
 takenjohnsblessing = 0
@@ -346,7 +347,7 @@ def mildewvillagesquare():
                 print('John: Would you mind gathering me 5 slime chunks? Ill pay you for it?')
                 acceptjohnquest = input('\n(Y)es or (N)o').strip().lower()
                 if acceptjohnquest == 'y':
-                    addquest('Slime Chunk Gathering', 'John needs 5 slime chunks for his furnace to get some food', 'Mildew Village')
+                    addquest('Slime Chunk Gathering', 'John needs 5 [slime chunk]s for his furnace to cook some food', 'Mildew Village')
                     print('John: HOH! HOH! THANKS KID! YOURE A LIFE SAVER!')
                     time.sleep(sleep_duration)
                     Johnmildewshop()
@@ -365,6 +366,7 @@ def mildewvillagesquare():
                                 print("John: HOH HOH HOH!, Thank you kid, these will do just fine!")
                                 time.sleep(sleep_duration)
                                 print("John: OH YEAH!!! heres yer payment!")
+                                removeitem(inv, 'Slime Chunk', 5)
                                 additem(inv, 'Gloves', 'Butchers Gloves', 1, 150, 5, 0, 25, 15, 0, 'yes', 'rare', 'Hands', 'no')
                                 addgold(72)
                                 time.sleep(sleep_duration)
@@ -475,10 +477,43 @@ def mildewvillagesquare():
                                 addquest('Gather Herbs for Edna', 'Edna needs 3 [Simple Herbs] to make some ointment, they can be found in the Mildew Forest', 'Mildew')
                                 time.sleep(sleep_short)
                                 ednasdialogue()
-                                #FINISH EDNAS QUEST FINISH EDNAS QUEST FINISH EDNAS QUEST FINISH EDNAS QUEST FINISH EDNAS QUEST FINISH EDNAS QUEST FINISH EDNAS QUEST FINISH EDNAS QUEST FINISH EDNAS QUEST FINISH EDNAS QUEST FINISH EDNAS QUEST FINISH EDNAS QUEST FINISH EDNAS QUEST FINISH EDNAS QUEST FINISH EDNAS QUEST FINISH EDNAS QUEST FINISH EDNAS QUEST FINISH EDNAS QUEST FINISH EDNAS QUEST
+                            if ednaquest == 'n':
+                                print('Edna: well alright then! If you change your mind feel free to come back!')
                             else:
                                 print('What was that young man? (Y)es or (N)o')
-
+                    if 'Gather Herbs for Edna' not in completedquests and 'Gather Herbs for Edna' in currentquests:
+                        print('Edna: Have you gotten those Herbs? (Y)es or (N)o')
+                        gottenherbs = input('').lower().strip()
+                        if gottenherbs == 'y':
+                            herbinfo = inv.get('Simple Herb', None)
+                            if herbinfo['Simple Herb'] >= 3:
+                                removeitem(inv, 'Simple Herb', 3)
+                                print('Edna: Great! Thank you so much!')
+                                time.sleep(sleep_duration)
+                                addgold(105)
+                                additem(inv, 'Ednacookie', 'Ednas Chocolate Chip Cookie', 5, 0, 0, 20, 20, 20, 0, 'no', 'rare', 'none', 'yes', 'Baked with Love')
+                                time.sleep(sleep_long)
+                                
+                                finishedquest('Gather Herbs for Edna')
+                                
+                                ednasdialogue()
+                            else:
+                                print('Edna: Thats not 3? Gather me 3 please, come back when youre done')
+                                time.sleep(sleep_duration)
+                                ednasdialogue()
+                        if gottenherbs == 'n':
+                            print("Edna: That's alright! Please bring me 3 [Simple Herb]s! Be safe!")
+                            time.sleep(sleep_duration)
+                    if 'Gather Herbs for Edna' in completedquests and ednagivingointment == 0:
+                        print('Edna: Thanks for the help young man!')
+                        time.sleep(sleep_duration)
+                        print('Edna: I actually only needed two, so i have a little extra, take it and be safe!')
+                        time.sleep(sleep_duration)
+                        additem(inv, 'Edna Ointment', 'Ednas Homemade Ointment', 3, 20, 0, 0, 0, 65, 0, 'no', 'uncommon', 'none', 'yes', 'A homemade ointment for cuts and bruises made by Edna, She may not look it but she was an alchemist in her earlier years, very effective!')
+                        time.sleep(sleep_duration)
+                        ednagivingointment +=1
+                        ednasdialogue()
+                            
 
                 elif choice == 'hug':
                     print(f'{name}: Could i have a hug?')
@@ -516,11 +551,8 @@ def mildewvillagesquare():
             print(greeting)
             time.sleep(sleep_duration)
             ednagreeting +=1
-        print('Edna: Do you need anything?')
+        print('Edna: Is there anything I can do for you?')
         ednasdialogue()
-        
-
-
     def mildewforest():
         pass
     mildewgoto = True
@@ -997,8 +1029,8 @@ def mainplaymenu():
             else:
                 print("Type 'Yes' if you have seen your gear")
                 
-    main = (f"\n(I)nventory", "(Q)uests", "(S)tats", "(L)ook around", "(G)ear")
-    print(main)
+    main = ("(I)nventory", "(Q)uests", "(S)tats", "(L)ook around", "(G)ear")
+    print(f'\n{main}')
     selectedinmenu = False
     while selectedinmenu is not True:
         navigateinv = input("where would you like to go?").strip().lower()
@@ -1046,7 +1078,7 @@ def checkclass():
     readstats()
     startofadventure()
 def startofgame():
-    global currentstamina,againinjohns, FORWEAPONS, firsttimeinednas, Goddessname, Darkgoddessname, currentmana, opensummonslots, gold, name, currenthealth, health, stamina, mana, power, summonslots, spec, town, firsttimeinmildew, firsttimeinjohns, firsttimegetjohnmeat, inv, NecromancerSummons, takenjohnsblessing, completedquests, currentquests, unequipeditems, newequipeditems, equipeditems
+    global ednagivingointment, currentstamina,againinjohns, FORWEAPONS, firsttimeinednas, Goddessname, Darkgoddessname, currentmana, opensummonslots, gold, name, currenthealth, health, stamina, mana, power, summonslots, spec, town, firsttimeinmildew, firsttimeinjohns, firsttimegetjohnmeat, inv, NecromancerSummons, takenjohnsblessing, completedquests, currentquests, unequipeditems, newequipeditems, equipeditems
     health = 100
     stamina = 100
     mana = 100
@@ -1065,6 +1097,7 @@ def startofgame():
     firsttimeinjohns = 0
     firsttimegetjohnmeat = 0
     firsttimeinednas = 0
+    ednagivingointment = 0
     Goddessname = 'Narukya'
     Darkgoddessname = 'Ire'
     takenjohnsblessing = 0
