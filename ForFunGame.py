@@ -54,7 +54,6 @@ FORWEAPONS = {
             'rarity': 'common', 'slot': 'WeaponBoth'},
     }
 NecromancerSummons = {}
-
 class Color:
     RED = '\033[91m'   # red
     GREEN = '\033[92m' # green
@@ -63,6 +62,10 @@ class Color:
     MAGENTA = '\033[95m'# purple
     WHITE = '\033[97m' # white
     END = '\033[0m'
+def losehealth(amount):
+    print(f'You lost {amount} Health!')
+    time.sleep(sleep_duration)
+    currenthealth -= amount
 def addlesserhealingpotion(quantity):
     additem(inv, "LHPotion", "Lesser Healing Potion", quantity, 20, 0, 0, 0, 50, 0,'no', 'common', 'none', 'yes', 'A potion that restores a small amount of health')
 def addlessermanapotion(quantity):
@@ -92,6 +95,16 @@ def additem(inv, item_id, name, quantity, value, power, mana, stamina, health, s
             'rarity': rarity, 'slot': slot, 'consumable' : consumable, 'description': description
         }
         print(f"Picked up a new item: {color_code}{name}{Color.END}")
+def silentadditem(inv, item_id, name, quantity, value, power, mana, stamina, health, summonslots, equipable, rarity, slot, consumable, description):
+    color_code = colorcode(rarity)
+    if item_id in inv:
+        inv[item_id]['quantity'] += quantity
+    else:
+        inv[item_id] = {
+            'name': name, 'quantity': quantity, 'value': value, 'power': power, 'mana': mana,
+            'stamina': stamina, 'health': health, 'summonslots': summonslots, 'equipable': equipable,
+            'rarity': rarity, 'slot': slot, 'consumable' : consumable, 'description': description
+        }
 
 def removeitem(inv, item_id, quantity):
     if item_id in inv:
@@ -447,7 +460,103 @@ def mildewvillagesquare():
     def mildewalley():
         pass
     def mildewsmallgarden():
-        pass
+        luckyholelootpool = {
+            
+        }# WORK ON THESEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+        unluckyholelootpool = {
+            'Bug Attack': None,
+            'Crappy Food': {'Crappy Food', 'Crappy Food', 1, 0, 0, 5, 0, -5, 0, 'no', 'common', 'none', 'yes', 'Horrible food, too bad to even look edible, I dont want to eat this.....'},
+            'Garbage': {'Garbage', 'Garbage',1, 0,0,0,0,0,0, 'no', 'common','none','no', 'Literal Garbage........'},
+        }   
+        green = colorcode('uncommon')
+        red = colorcode('mythic')
+        global GardenCooldown
+        currenttime = time.time()
+        interval = 15 * 60
+        asfsafsafsdasfdasdasfdaf = currenttime - GardenCooldown
+        letuknowtimeforgarden = (interval - asfsafsafsdasfdasdasfdaf) / 60
+        if currenttime - GardenCooldown >=  interval:
+            gardenminigamequestion = True
+            time.sleep(sleep_duration)
+            print(f'\nYou enter the garden, there seems to be 6 holes in the ground, do you reach in one?\n')
+            time.sleep(sleep_duration)
+            while gardenminigamequestion == True:
+                Y_or_N_for_garden = input('(Y)es or (N)o?').strip().lower()
+                if Y_or_N_for_garden == 'y':
+                    doingminigame = True
+                    print('You decide to stick your hand into a hole... Which one? (1-6)')
+                    while doingminigame == True:
+                        gardenminigame = input(f'\n1, 2, 3, 4, 5, 6\n').strip()
+                        holewgoodloot = random.randint(1, 6)
+                        holewithbadloot = random.randint(1,6)
+                        while holewithbadloot == holewgoodloot:
+                            holewithbadloot = random.randint(1,6)
+                        if int(gardenminigame) == holewgoodloot:
+                            print(f'You put your hand in hole {gardenminigame}...')
+                            time.sleep(sleep_long)
+                            print(f'{green}LUCKY!{Color.END}')
+                            time.sleep(sleep_short)
+                            itemfoundinluckyhole = random.choice(luckyholelootpool)
+                            silentadditem(itemfoundinluckyhole)
+                            rarity = itemfoundinluckyhole['rarity']
+                            color_code = colorcode(rarity)
+                            print(f'You found {color_code}{itemfoundinluckyhole}{Color.END}!')
+                            time.sleep(sleep_duration)
+                            GardenCooldown = currenttime
+                            doingminigame = False
+                        if int(gardenminigame) == holewithbadloot:
+                            print(f'You put your hand in hole {gardenminigame}...')
+                            time.sleep(sleep_long)
+                            print(f'{red}UNLUCKY{Color.end}')
+                            time.sleep(sleep_short)
+                            itemfoundinunluckyhole = random.choice(unluckyholelootpool)
+                            if itemfoundinunluckyhole == 'Bug Attack':
+                                print('OW!....')
+                                time.sleep(sleep_short)
+                                damagefrombug = random.randint(1,20)
+                                print('You were bitten by a bug.')
+                                time.sleep(sleep_short)
+                                losehealth(damagefrombug)
+                                time.sleep(sleep_duration)
+                                mildewvillagesquare()
+                                doingminigame = False
+                                GardenCooldown = currenttime
+                            else:
+                                silentadditem(itemfoundinunluckyhole)
+                                rarity = itemfoundinunluckyhole['rarity']
+                                color_code = colorcode(rarity)
+                                print(f'You found {color_code}{itemfoundinunluckyhole}{Color.END}')
+                                time.sleep(sleep_duration)
+                                mildewvillagesquare()
+                                doingminigame = False
+                                GardenCooldown = currenttime
+                        elif not gardenminigame.isdigit():
+                            print('Choose a number 1-6')
+                        else:
+                            print(f'You put your hand in hole {gardenminigame}...')
+                            time.sleep(sleep_long)
+                            print('OH!?!?')
+                            time.sleep(sleep_duration)
+                            print('Nothing........')
+                            time.sleep(sleep_duration)
+                            mildewvillagesquare()
+                            doingminigame = False
+                            GardenCooldown = currenttime
+
+                elif Y_or_N_for_garden == 'n':
+                    print(f'\nYou leave the garden without checking the holes.\n')
+                    time.sleep(sleep_duration)
+                    mildewvillagesquare()
+                    gardenminigamequestion = False
+                else:
+                    print('(Y)es or (N)o?')
+
+        else:
+            print(f'You Need to wait another {letuknowtimeforgarden} minutes to do this again.')
+            time.sleep(sleep_duration)
+            mildewvillagesquare()
+
+
     def ednashome():
         def ednasdialogue():
             ednaquestion = False
@@ -835,6 +944,7 @@ def mainplaymenu():
             update_weapon_slots()
             inventory()
         def useitem():
+
         
             global currenthealth, currentstamina, currentmana
             
@@ -881,6 +991,84 @@ def mainplaymenu():
                     print('That is not a consumable.')
             else:
                 print("Invalid input, please type the item's name.")
+        def trashitem():
+            global inv
+            print("\nInventory:")
+            for item_id, details in inv.items():
+                name = details['name']
+                quantity = details['quantity']
+                value = details['value']
+                rarity = details['rarity']
+                description = details['description']
+                color_code = colorcode(rarity)  # Get the color code for the rarity
+                whitecolor = colorcode('common')
+                
+                print(f"\nName: {color_code}{name}{Color.END}, Quantity: {quantity}, Value: {value}, Rarity: {rarity}, {whitecolor}Description: {description}{Color.END}")
+            trashing = True
+            time.sleep(sleep_duration)
+            print('What would you like to trash? (B)ack?')
+            while trashing == True:
+                trash = input('(Any item)').lower().strip()
+                item_to_trash = None
+                for item_id, details in inv.items():
+                    if details.get('name', '').lower() == trash:
+                        item_to_trash = (item_id, details)
+                        break
+                
+                if item_to_trash:
+                    item_id, details = item_to_trash
+                    name = details.get('name', None)
+                    print(f'How many of {name} would you like to trash? (You have {details.get('quantity', 0)})')
+                    numbertodelete = True
+                    while numbertodelete == True:
+                        amount = (input('').strip()
+                        if int(amount.isdigit()): #THISSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
+                            if int(amount) >= details.get('quantity',0):
+                                time.sleep(sleep_short)
+                                print('This will trash ALL of them, are you sure?')
+                                sure = input('(Y) or (N)?').lower().strip()
+                                if sure == 'y':
+                                    print('PERMANENTLY DELETE THESE ITEMS?')
+                                    time.sleep(sleep_duration)
+                                    suresure = input('Y or N').lower().strip()
+                                    if suresure == 'y':
+                                        allofthem = details.get('quantity', 0)
+                                        removeitem(inv, item_id, allofthem)
+                                        time.sleep(sleep_short)
+                                        inventory()
+                                        trashing = False
+                                        numbertodelete = False
+                                if sure == 'n':
+                                    inventory()
+                                    trashing = False
+                                    numbertodelete = False
+                            elif amount:
+                                print(f'This will trash {amount} of {item_id}, are you sure?')
+                                sure = input('(Y) or (N)?').lower().strip()
+                                if sure == 'y':
+                                    print('PERMANENTLY DELETE THESE ITEMS?')
+                                    time.sleep(sleep_duration)
+                                    suresure = input('Y or N').lower().strip()
+                                    if suresure == 'y':
+                                        removeitem(inv, item_id, int(amount))
+                                        time.sleep(sleep_short)
+                                        inventory()
+                                        trashing = False
+                                        numbertodelete = False
+                                elif sure == 'n':
+                                    inventory()
+                                    trashing = False
+                                    numbertodelete = False
+                        else:
+                            print('Please enter a number.')
+                elif trash == 'b':
+                    print('Returning')
+                    time.sleep(sleep_duration)
+                    inventory()
+                    trashing = False
+                else:
+                    print('What would you like to trash? or (B)ack')
+
         update_weapon_slots()
         global equipeditems, inv
         print("\nEquipped Items:")
@@ -912,7 +1100,7 @@ def mainplaymenu():
             
             print(f"\nName: {color_code}{name}{Color.END}, Quantity: {quantity}, Value: {value}, Rarity: {rarity}, {whitecolor}Description: {description}{Color.END}")
         while True:
-            invquestion = input("\nWould you like to 'Go (B)ack', '(E)quip Gear', '(U)nequip Gear', or '(USE) Item'").lower().strip()
+            invquestion = input("\nWould you like to 'Go (B)ack', '(E)quip Gear', '(U)nequip Gear', '(USE) Item', or '(T)rash item").lower().strip()
             
             if invquestion == "b":
                 mainplaymenu()
@@ -925,6 +1113,9 @@ def mainplaymenu():
                 
             elif invquestion == "use":
                 useitem()
+            
+            elif invquestion == 't':
+                trashitem()
             else:
                 print("invalid input, 'Go Back', 'Equip', or 'Use'")
     def currenttown():
@@ -1078,7 +1269,7 @@ def checkclass():
     readstats()
     startofadventure()
 def startofgame():
-    global ednagivingointment, currentstamina,againinjohns, FORWEAPONS, firsttimeinednas, Goddessname, Darkgoddessname, currentmana, opensummonslots, gold, name, currenthealth, health, stamina, mana, power, summonslots, spec, town, firsttimeinmildew, firsttimeinjohns, firsttimegetjohnmeat, inv, NecromancerSummons, takenjohnsblessing, completedquests, currentquests, unequipeditems, newequipeditems, equipeditems
+    global GardenCooldown, ednagivingointment, currentstamina,againinjohns, FORWEAPONS, firsttimeinednas, Goddessname, Darkgoddessname, currentmana, opensummonslots, gold, name, currenthealth, health, stamina, mana, power, summonslots, spec, town, firsttimeinmildew, firsttimeinjohns, firsttimegetjohnmeat, inv, NecromancerSummons, takenjohnsblessing, completedquests, currentquests, unequipeditems, newequipeditems, equipeditems
     health = 100
     stamina = 100
     mana = 100
@@ -1089,6 +1280,7 @@ def startofgame():
     currentstamina = 100
     currentmana = 100
     opensummonslots = 100
+    GardenCooldown = 0
     spec = "none"
     name = ""
     town = "Mildew"
