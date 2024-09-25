@@ -112,9 +112,24 @@ def removeitem(inv, item_id, quantity):
             rarity = inv[item_id]['rarity']
             color_code = colorcode(rarity)
             inv[item_id]['quantity'] -= quantity
+            print(f"Used {quantity} of {color_code}{inv[item_id]['name']}{Color.END}.")
             if inv[item_id]['quantity'] == 0:
                 del inv[item_id]
-            print(f"Used {quantity} of {color_code}{inv[item_id]['name']}{Color.END}.")
+
+        else:
+            print("Not enough of this item.")
+    else:
+        print("Item not found in inventory.")
+def deleteitem(inv, item_id, quantity):
+    if item_id in inv:
+        if inv[item_id]['quantity'] >= quantity:
+            rarity = inv[item_id]['rarity']
+            color_code = colorcode(rarity)
+            inv[item_id]['quantity'] -= quantity
+            print(f"Deleted {quantity} of {color_code}{inv[item_id]['name']}{Color.END}.")
+            if inv[item_id]['quantity'] == 0:
+                del inv[item_id]
+
         else:
             print("Not enough of this item.")
     else:
@@ -459,79 +474,117 @@ def mildewvillagesquare():
                 print("What was that kid? My ears aren't the same as they used to be... HOH HOH!")
     def mildewalley():
         pass
-    def mildewsmallgarden():
+    def mildewsmallgarden(): #STULL WORK ON THIS A LOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOT
         luckyholelootpool = {
-            
-        }# WORK ON THESEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+            'Magic Seed': ('Magic Seed', 1, 100, 0, 200, 0, 50, 0, 'yes', 'rare', 'none', 'no', 'A rare seed that will restore your mana by 200 and magically heal small wounds.')
+        }
+        
         unluckyholelootpool = {
-            'Bug Attack': None,
-            'Crappy Food': {'Crappy Food', 'Crappy Food', 1, 0, 0, 5, 0, -5, 0, 'no', 'common', 'none', 'yes', 'Horrible food, too bad to even look edible, I dont want to eat this.....'},
-            'Garbage': {'Garbage', 'Garbage',1, 0,0,0,0,0,0, 'no', 'common','none','no', 'Literal Garbage........'},
-        }   
+            'Bug Attack': ('Bug Attack', 0, 0, 0, 0, 0, 0, 0, 'no', 'common', 'none', 'no', 'A nasty bug bite.'),
+            'Crappy Food': ('Crappy Food', 1, 0, 0, 0, 5, 0, -5, 'no', 'common', 'none', 'yes', 'Horrible food, too bad to even look edible.'),
+            'Garbage': ('Garbage', 1, 0, 0, 0, 0, 0, 0, 'no', 'common', 'none', 'no', 'Literal garbage.')
+        }
+        
         green = colorcode('uncommon')
         red = colorcode('mythic')
+        
         global GardenCooldown
         currenttime = time.time()
         interval = 15 * 60
-        asfsafsafsdasfdasdasfdaf = currenttime - GardenCooldown
-        letuknowtimeforgarden = (interval - asfsafsafsdasfdasdasfdaf) / 60
-        if currenttime - GardenCooldown >=  interval:
+        time_since_last_garden = currenttime - GardenCooldown
+        time_to_wait = (interval - time_since_last_garden) / 60
+        
+        if currenttime - GardenCooldown >= interval:
             gardenminigamequestion = True
             time.sleep(sleep_duration)
             print(f'\nYou enter the garden, there seems to be 6 holes in the ground, do you reach in one?\n')
             time.sleep(sleep_duration)
-            while gardenminigamequestion == True:
+            
+            while gardenminigamequestion:
                 Y_or_N_for_garden = input('(Y)es or (N)o?').strip().lower()
                 if Y_or_N_for_garden == 'y':
                     doingminigame = True
                     print('You decide to stick your hand into a hole... Which one? (1-6)')
-                    while doingminigame == True:
+                    while doingminigame:
                         gardenminigame = input(f'\n1, 2, 3, 4, 5, 6\n').strip()
-                        holewgoodloot = random.randint(1, 6)
-                        holewithbadloot = random.randint(1,6)
-                        while holewithbadloot == holewgoodloot:
-                            holewithbadloot = random.randint(1,6)
+                        
+                        # Fixed values for testing; uncomment for random values
+                        # holewgoodloot = random.randint(1, 6)
+                        # holewithbadloot = random.randint(1, 6)
+                        holewgoodloot = 1
+                        holewithbadloot = 2
+                        
+                        # Ensure bad loot hole is different from good loot hole
+                        # while holewithbadloot == holewgoodloot:
+                        #     holewithbadloot = random.randint(1, 6)
+                        
+                        print(f'Checking hole {gardenminigame}...')
+                        
                         if int(gardenminigame) == holewgoodloot:
                             print(f'You put your hand in hole {gardenminigame}...')
                             time.sleep(sleep_long)
                             print(f'{green}LUCKY!{Color.END}')
                             time.sleep(sleep_short)
-                            itemfoundinluckyhole = random.choice(luckyholelootpool)
-                            silentadditem(itemfoundinluckyhole)
-                            rarity = itemfoundinluckyhole['rarity']
+                            
+                            itemfoundinluckyhole = random.choice(list(luckyholelootpool.values()))
+                            print(f'Item found in lucky hole: {itemfoundinluckyhole}')
+                            name = itemfoundinluckyhole[0]
+                            quantity = itemfoundinluckyhole[1]
+                            value = itemfoundinluckyhole[2]
+                            power = itemfoundinluckyhole[3]
+                            mana = itemfoundinluckyhole[4]
+                            stamina = itemfoundinluckyhole[5]
+                            health = itemfoundinluckyhole[6]
+                            summonslots = itemfoundinluckyhole[7]
+                            equipable = itemfoundinluckyhole[8]
+                            rarity = itemfoundinluckyhole[9]
+                            slot = itemfoundinluckyhole[10]
+                            consumable = itemfoundinluckyhole[11]
+                            description = itemfoundinluckyhole[12]
+                            
+                            # Assuming `inv` is defined somewhere in the code. Replace `inv` with your inventory variable.
+                            inv = {}  # Example inventory; replace with actual inventory
+                            silentadditem(inv, *itemfoundinluckyhole)
                             color_code = colorcode(rarity)
-                            print(f'You found {color_code}{itemfoundinluckyhole}{Color.END}!')
+                            print(f'You found {color_code}{name}{Color.END}!')
                             time.sleep(sleep_duration)
+                            
                             GardenCooldown = currenttime
                             doingminigame = False
-                        if int(gardenminigame) == holewithbadloot:
+                            
+                        elif int(gardenminigame) == holewithbadloot:
                             print(f'You put your hand in hole {gardenminigame}...')
                             time.sleep(sleep_long)
-                            print(f'{red}UNLUCKY{Color.end}')
+                            print(f'{red}UNLUCKY{Color.END}')
                             time.sleep(sleep_short)
-                            itemfoundinunluckyhole = random.choice(unluckyholelootpool)
-                            if itemfoundinunluckyhole == 'Bug Attack':
+                            
+                            itemfoundinunluckyhole = random.choice(list(unluckyholelootpool.values()))
+                            print(f'Item found in unlucky hole: {itemfoundinunluckyhole}')
+                            if itemfoundinunluckyhole[0] == 'Bug Attack':
                                 print('OW!....')
                                 time.sleep(sleep_short)
-                                damagefrombug = random.randint(1,20)
+                                damagefrombug = random.randint(1, 20)
                                 print('You were bitten by a bug.')
                                 time.sleep(sleep_short)
                                 losehealth(damagefrombug)
                                 time.sleep(sleep_duration)
                                 mildewvillagesquare()
-                                doingminigame = False
                                 GardenCooldown = currenttime
+                                doingminigame = False
                             else:
-                                silentadditem(itemfoundinunluckyhole)
-                                rarity = itemfoundinunluckyhole['rarity']
+                                silentadditem(*itemfoundinunluckyhole)
+                                name = itemfoundinunluckyhole[0]
+                                rarity = itemfoundinunluckyhole[9]
                                 color_code = colorcode(rarity)
-                                print(f'You found {color_code}{itemfoundinunluckyhole}{Color.END}')
+                                print(f'You found {color_code}{name}{Color.END}')
                                 time.sleep(sleep_duration)
                                 mildewvillagesquare()
-                                doingminigame = False
                                 GardenCooldown = currenttime
+                                doingminigame = False
+                        
                         elif not gardenminigame.isdigit():
                             print('Choose a number 1-6')
+                        
                         else:
                             print(f'You put your hand in hole {gardenminigame}...')
                             time.sleep(sleep_long)
@@ -540,21 +593,24 @@ def mildewvillagesquare():
                             print('Nothing........')
                             time.sleep(sleep_duration)
                             mildewvillagesquare()
-                            doingminigame = False
                             GardenCooldown = currenttime
+                            doingminigame = False
 
                 elif Y_or_N_for_garden == 'n':
                     print(f'\nYou leave the garden without checking the holes.\n')
                     time.sleep(sleep_duration)
                     mildewvillagesquare()
                     gardenminigamequestion = False
+                
                 else:
                     print('(Y)es or (N)o?')
 
         else:
-            print(f'You Need to wait another {letuknowtimeforgarden} minutes to do this again.')
+            print(f'You need to wait another {time_to_wait:.1f} minutes to do this again.')
             time.sleep(sleep_duration)
             mildewvillagesquare()
+
+
 
 
     def ednashome():
@@ -1007,7 +1063,7 @@ def mainplaymenu():
             trashing = True
             time.sleep(sleep_duration)
             print('What would you like to trash? (B)ack?')
-            while trashing == True:
+            while trashing:
                 trash = input('(Any item)').lower().strip()
                 item_to_trash = None
                 for item_id, details in inv.items():
@@ -1018,56 +1074,53 @@ def mainplaymenu():
                 if item_to_trash:
                     item_id, details = item_to_trash
                     name = details.get('name', None)
-                    print(f'How many of {name} would you like to trash? (You have {details.get('quantity', 0)})')
-                    numbertodelete = True
-                    while numbertodelete == True:
-                        amount = (input('').strip()
-                        if int(amount.isdigit()): #THISSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
-                            if int(amount) >= details.get('quantity',0):
-                                time.sleep(sleep_short)
-                                print('This will trash ALL of them, are you sure?')
+                    print(f'How many of {name} would you like to trash? (You have {details.get("quantity", 0)})')
+                
+                    amount = input('').strip()
+                    if amount.isdigit():  # Correct validation check
+                        amount = int(amount)
+                        if amount >= details.get('quantity', 0):
+                            time.sleep(sleep_short)
+                            print('This will trash ALL of them, are you sure?')
+                            suresure = False
+                            while not suresure:
                                 sure = input('(Y) or (N)?').lower().strip()
-                                if sure == 'y':
-                                    print('PERMANENTLY DELETE THESE ITEMS?')
-                                    time.sleep(sleep_duration)
-                                    suresure = input('Y or N').lower().strip()
-                                    if suresure == 'y':
-                                        allofthem = details.get('quantity', 0)
-                                        removeitem(inv, item_id, allofthem)
-                                        time.sleep(sleep_short)
-                                        inventory()
-                                        trashing = False
-                                        numbertodelete = False
-                                if sure == 'n':
+                                if sure == 'y': 
+                                    allofthem = details.get('quantity', 0)
+                                    deleteitem(inv, item_id, allofthem)  # Fix: use item_id
+                                    time.sleep(sleep_short)
                                     inventory()
                                     trashing = False
-                                    numbertodelete = False
-                            elif amount:
-                                print(f'This will trash {amount} of {item_id}, are you sure?')
-                                sure = input('(Y) or (N)?').lower().strip()
-                                if sure == 'y':
-                                    print('PERMANENTLY DELETE THESE ITEMS?')
-                                    time.sleep(sleep_duration)
-                                    suresure = input('Y or N').lower().strip()
-                                    if suresure == 'y':
-                                        removeitem(inv, item_id, int(amount))
-                                        time.sleep(sleep_short)
-                                        inventory()
-                                        trashing = False
-                                        numbertodelete = False
+                                    suresure = True
                                 elif sure == 'n':
                                     inventory()
                                     trashing = False
-                                    numbertodelete = False
+                                    suresure = True
                         else:
-                            print('Please enter a number.')
+                            print(f'This will trash {amount} of {name}, are you sure?')
+                            suresure = False
+                            while not suresure:
+                                sure = input('(Y) or (N)?').lower().strip()
+                                if sure == 'y':
+                                    deleteitem(inv, item_id, amount)  # Fix: use amount
+                                    time.sleep(sleep_short)
+                                    inventory()
+                                    trashing = False
+                                    suresure = True
+                                elif sure == 'n':
+                                    inventory()
+                                    trashing = False
+                                    suresure = True
+                    else:       
+                        print('Please enter a number.')
                 elif trash == 'b':
                     print('Returning')
                     time.sleep(sleep_duration)
                     inventory()
                     trashing = False
                 else:
-                    print('What would you like to trash? or (B)ack')
+                    print('Item not found.')
+
 
         update_weapon_slots()
         global equipeditems, inv
