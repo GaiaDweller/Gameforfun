@@ -1514,8 +1514,16 @@ def startofadventure():
                 addlesserhealingpotion(6)
                 starttt = True
             elif spec == "warlock":
-                 #KEEPWORKING ON THIS HEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
-                pass
+                additem(inv, "SON", "Staff of Nature", 1, 100, 9, 100, 20, 0, 0, 'yes', 'uncommon', 'WeaponBoth', 'no', 'A weapon ethically harvested from the branch of an ElderWood Tree.')
+                additem(inv, 'ROBE', 'Leaf Robe', 1, 15, 0, 72, 20, 35, 0, 'yes', 'common', 'Torso', 'no', 'A Robe born from leaves and twigs, holds weak magical properties.')
+                addlesserhealingpotion(3)
+                addlessermanapotion(3)
+            elif spec == 'swordsman':
+                additem(inv, 'IS', 'Iron Sword', 1, 50, 32, 0, -10, 10, 0, 'yes', 'common', 'WeaponRight', 'yes', 'A sword forged iron, your average adventurer gear')
+                additem(inv, 'CM', 'ChainMail', 1, 62, 0, 0, -5, 85, 0, 'yes', 'uncommon', 'Torso', 'no', 'Chains linked together to form a protective layer, useful against slashing attacks.')
+                additem(inv, 'PL', 'Padded Leggings', 1, 15, 0, 0, 15, 50, 0, 'yes', 'common', 'Legs', 'no', 'Pants with iron plates inserted for extra protection.')
+                additem(inv, 'IG', 'Iron Gloves', 1, 15, 2, 0, -5, 15, 0, 'yes', 'common', 'Hands', 'no', 'Gloves with iron protection, good for paper cuts...')
+                addlesserhealingpotion(3)
         elif finalizeclass == "no":
             time.sleep(sleep_short)
             print("choose well friend")
