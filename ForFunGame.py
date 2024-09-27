@@ -81,6 +81,7 @@ def colorcode(rarity):
     }
     return color_map.get(rarity.lower(), Color.END)
 def addgold(amount):
+    global gold
     print(f'+{amount} gold')
     gold += amount
 def additem(inv, item_id, name, quantity, value, power, mana, stamina, health, summonslots, equipable, rarity, slot, consumable, description):
@@ -225,6 +226,125 @@ def doctorheal():
 
 def mildewvillagesquare():
     def Johnmildewshop():
+        def johnsshop():
+            global gold
+            print('John: Let me check what i have for you...')
+            time.sleep(sleep_duration)
+            print('''
+                  Savory Meat: 100 Gold
+                  Strongly Seasoned Meat: 75 Gold
+                  Sharp Tasting Meat: 45 Gold
+                  Steak: 30 Gold
+                  Raw Meat: 15 Gold
+''')
+            buyingfromjohn = True
+            while buyingfromjohn:
+                print('John: What would you like to buy?')
+                purchasefromjohn = input('Items name or (N)evermind').lower().strip()
+                if purchasefromjohn == 'savory meat' or purchasefromjohn == 'strongly seasoned meat' or purchasefromjohn == 'sharp tasting meat' or purchasefromjohn == 'steak' or purchasefromjohn == 'raw meat' or purchasefromjohn == 'n':
+                    buyingfromjohn = False
+                else:
+                    print('John: What was that?')
+            if purchasefromjohn == 'savory meat':
+                howmanyy = True
+                while howmanyy:
+                    howmany = input('John: How Many? (N)evermind')
+                    price = int(howmany) * 100
+                    if gold >= price:
+                        additem(inv, 'SM', 'Savory Meat', howmany, 50, 0, 25, 25, 125, 0, 'no', 'rare', None, 'yes', 'When you taste this meat, you will feel so many great emotions, John is an amazing cook...')
+                        howmanyy = False
+                    if howmany == 'n':
+                        print('John: Alrighty then, Anything else?')
+                        time.sleep(sleep_duration)
+                        johnsshop()
+
+                        howmanyy = False
+                    else:
+                        print('John: You dont have enough Gold!')
+                        howmanyy = False
+
+                        johnsshop()
+            if purchasefromjohn == 'strongly seasoned meat':
+                howmanyy = True
+                while howmanyy:
+                    howmany = input('John: How Many? (N)evermind')
+                    price = int(howmany) * 75
+                    if gold >= price:
+                        additem(inv, 'SSM', 'Strongly Seasoned Meat', howmany, 30, 0, 15, 15, 70, 0, 'no', 'uncommon', None, 'yes', 'John is a great cook, this meat will keep you well fed and possibly accelerate your healing...')
+                        howmanyy = False
+                    if howmany == 'n':
+                        print('John: Alrighty then, Anything else?')
+                        time.sleep(sleep_duration)
+                        johnsshop()
+
+                        howmanyy = False
+                    else:
+                        print('John: You dont have enough Gold!')
+                        howmanyy = False
+
+                        johnsshop()
+            if purchasefromjohn == 'sharp tasting meat':
+                howmanyy = True
+                while howmanyy:
+                    howmany = input('John: How Many? (N)evermind')
+                    price = int(howmany) * 45
+                    if gold >= price:
+                        additem(inv, 'STM', 'Sharp Tasting Meat', howmany, 20, 0, 10, 10, 45, 0, 'no', 'uncommon', None, 'yes', 'Meat with an interesting taste!')
+                        howmanyy = False
+                    if howmany == 'n':
+                        print('John: Alrighty then, Anything else?')
+                        time.sleep(sleep_duration)
+                        johnsshop()
+
+                        howmanyy = False
+                    else:
+                        print('John: You dont have enough Gold!')
+                        howmanyy = False
+
+                        johnsshop()
+            if purchasefromjohn == 'steak':
+                howmanyy = True
+                while howmanyy:
+                    howmany = input('John: How Many? (N)evermind')
+                    price = int(howmany) * 30
+                    if gold >= price:
+                        additem(inv, 'S', 'Steak', howmany, 10, 0, 5, 5, 25, 0, 'no', 'common', None, 'yes', 'Steak, Blessed with johns great cooking...')
+                        howmanyy = False
+                    if howmany == 'n':
+                        print('John: Alrighty then, Anything else?')
+                        time.sleep(sleep_duration)
+                        johnsshop()
+
+                        howmanyy = False
+                    else:
+                        print('John: You dont have enough Gold!')
+                        howmanyy = False
+
+                        johnsshop()
+            if purchasefromjohn == 'raw meat':
+                howmanyy = True
+                while howmanyy:
+                    howmany = input('John: How Many? (N)evermind')
+                    price = int(howmany) * 15
+                    if gold >= price:
+                        additem(inv, 'RM', 'Raw Meat', howmany, 30, 0, 2, 2, -15, 0, 'no', 'common', None, 'yes', 'Uncooked Meat, maybe you could cook it eventually?')
+                        howmanyy = False
+                    if howmany == 'n':
+                        print('John: Alrighty then, Anything else?')
+                        time.sleep(sleep_duration)
+                        johnsshop()
+
+                        howmanyy = False
+                    else:
+                        print('John: You dont have enough Gold!')
+                        howmanyy = False
+
+                        johnsshop()
+            if purchasefromjohn == 'n':
+                print('John: Alrighty then, if u need anything let me know!')
+                time.sleep(sleep_duration)
+                Johnmildewshop()
+
         def talkingtojohn():
             choosingjohnsblessing = True
             global name, Goddessname, spec, power, health, stamina, mana, summonslots, takenjohnsblessing, againinjohns
@@ -446,7 +566,7 @@ def mildewvillagesquare():
                 johngreeting = 1
             time.sleep(sleep_duration)
             print("John: What cen I du you fer?")
-            johnquestion = input("(W)anna talk?, (A)nything you need done?, (T)ell me a joke please, (G)oodbye").strip().lower()
+            johnquestion = input("(W)anna talk?, (A)nything you need done?, (T)ell me a joke please, (S)hop, (G)oodbye").strip().lower()
             
             if johnquestion == 'w':
                 print(f'{name}: Can we talk?')
@@ -462,6 +582,11 @@ def mildewvillagesquare():
                 print(f'{name}: Can you tell me a joke?')
                 time.sleep(sleep_short)
                 johnsdadjokes()
+                askquestionjohn = False
+            elif johnquestion == 's':
+                print(f'{name}: What do you have for sale?')
+                time.sleep(sleep_short)
+                johnsshop()
                 askquestionjohn = False
             elif johnquestion == 'g':
                 print(f'{name}: See you later John!')
@@ -1506,24 +1631,30 @@ def startofadventure():
                 additem(inv, "TON", "Common Tome of Necromancy", 1, 0, 0, 10, 0, 0, 1,'yes', 'common', 'WeaponRight', 'no', 'A tome of your findings on the undead')
                 addlessermanapotion(4)
                 addlesserhealingpotion(3)
+                addgold(50)
                 starttt = True
             elif spec == "brawler":
                 additem(inv, "CSC", "Cracked Stone Cestus", 1, 12, 25, 0, -12, 15, 0,'yes', 'common', 'WeaponBoth', 'no', 'Two old rocks you hand carved yourself, you dropped it and it cracked though.')
                 additem(inv, "Start Fighters Wraps", "Fighters Wraps", 1, 15, 10, 0, 25, 10, 0,'yes', 'uncommon', 'Arms', 'no', 'Leather strips, your father taught you how to reinforce your wrists using them, not a common technique.')
                 additem(inv, "Fathers Armor", "Leather Patchwork Armor", 1, 100, 0, 0, 10, 100, 0,'yes', 'common', 'Torso', 'no', 'Old armor your father had in his closet')
                 addlesserhealingpotion(6)
+                addgold(50)
                 starttt = True
             elif spec == "warlock":
                 additem(inv, "SON", "Staff of Nature", 1, 100, 9, 100, 20, 0, 0, 'yes', 'uncommon', 'WeaponBoth', 'no', 'A weapon ethically harvested from the branch of an ElderWood Tree.')
                 additem(inv, 'ROBE', 'Leaf Robe', 1, 15, 0, 72, 20, 35, 0, 'yes', 'common', 'Torso', 'no', 'A Robe born from leaves and twigs, holds weak magical properties.')
                 addlesserhealingpotion(3)
                 addlessermanapotion(3)
+                addgold(50)
+                starttt = True
             elif spec == 'swordsman':
                 additem(inv, 'IS', 'Iron Sword', 1, 50, 32, 0, -10, 10, 0, 'yes', 'common', 'WeaponRight', 'yes', 'A sword forged iron, your average adventurer gear')
                 additem(inv, 'CM', 'ChainMail', 1, 62, 0, 0, -5, 85, 0, 'yes', 'uncommon', 'Torso', 'no', 'Chains linked together to form a protective layer, useful against slashing attacks.')
                 additem(inv, 'PL', 'Padded Leggings', 1, 15, 0, 0, 15, 50, 0, 'yes', 'common', 'Legs', 'no', 'Pants with iron plates inserted for extra protection.')
                 additem(inv, 'IG', 'Iron Gloves', 1, 15, 2, 0, -5, 15, 0, 'yes', 'common', 'Hands', 'no', 'Gloves with iron protection, good for paper cuts...')
                 addlesserhealingpotion(3)
+                addgold(50)
+                starttt = True
         elif finalizeclass == "no":
             time.sleep(sleep_short)
             print("choose well friend")
