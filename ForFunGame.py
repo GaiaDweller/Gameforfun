@@ -138,7 +138,7 @@ def deleteitem(inv, item_id, quantity):
 
 def addquest(questname, description, town):
     global currentquests, completedquests
-    
+
     if questname in completedquests:
         print('You have already completed this quest.')
     elif questname in currentquests:
@@ -149,7 +149,7 @@ def addquest(questname, description, town):
 
 def finishedquest(questname):
     global currentquests, completedquests
-    
+
     if questname in completedquests:
         pass
     elif questname in currentquests:
@@ -158,7 +158,7 @@ def finishedquest(questname):
         print(f'Completed {questname}')
     else:
         print(f'{questname} is not in your current quests.')
-    
+
 
 def display_item_stats(item):
     name = item.get('name', 'Unknown')
@@ -185,7 +185,7 @@ def checkcurrentstats():
 
     if currentstamina > stamina:
         currentstamina = stamina
-    
+
     if opensummonslots > summonslots:
         opensummonslots = summonslots
 def displaycurrentstats():
@@ -364,7 +364,7 @@ def mildewvillagesquare():
                 time.sleep(sleep_long)
                 print('John: Choose wisely kid...')
                 if spec == 'necromancer':
-                    print('John: The Blessing of Power, The Blessing of Health, The Blessing of Endurance, The Blessing of Intelect')
+                    print('John: The Blessing of Power, The Blessing of Health, The Blessing of Endurance, The Blessing of Intellect')
                     time.sleep(sleep_long)
                     print('You feel something arise inside of you...')
                     time.sleep(sleep_long)
@@ -377,7 +377,7 @@ def mildewvillagesquare():
                 while choosingjohnsblessing:
                     print('\nBlessing of (P)ower\nBlessing of (H)ealth\nBlessing of (E)ndurance\nBlessing of (I)ntelect')
                     if spec == 'necromancer':
-                        print('(C)urse of a Black Heart')
+                        print('(C)urse of a Dark Heart')
                     johnsblessing = input('Which Blessing do you choose?').strip().lower()
                     if johnsblessing == 'p':
                         print('John: Dono vobis benedictionem magnae virtutis')
@@ -412,14 +412,14 @@ def mildewvillagesquare():
                     elif johnsblessing == 'i':
                         print('John: Dono vobis benedictionem magni intellectus')
                         time.sleep(sleep_short)
-                        print('John: Smart ass.. HOH HOH!')
+                        print('John: Smart ass... HOH HOH!')
                         print('+30 mana')
                         mana += 30
                         takenjohnsblessing += 1
                         againinjohns = 'again '
                         Johnmildewshop()
                         choosingjohnsblessing = False
-                        
+
                     elif johnsblessing == 'c' and spec == 'necromancer':
                         print('John: Erat captionem, cav......')
                         time.sleep(sleep_short)
@@ -449,7 +449,7 @@ def mildewvillagesquare():
                         againinjohns = 'again '
                         Johnmildewshop()
                         choosingjohnsblessing = False
-                        
+
                     else:
                         print('What blessing kid?')
             else:
@@ -567,7 +567,7 @@ def mildewvillagesquare():
             time.sleep(sleep_duration)
             print("John: What cen I du you fer?")
             johnquestion = input("(W)anna talk?, (A)nything you need done?, (T)ell me a joke please, (S)hop, (G)oodbye").strip().lower()
-            
+
             if johnquestion == 'w':
                 print(f'{name}: Can we talk?')
                 time.sleep(sleep_duration)
@@ -599,93 +599,62 @@ def mildewvillagesquare():
                 print("What was that kid? My ears aren't the same as they used to be... HOH HOH!")
     def mildewalley():
         pass
-    def mildewsmallgarden(): #STULL WORK ON THIS A LOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOT
-        luckyholelootpool = {
-            'Magic Seed': ('Magic Seed', 1, 100, 0, 200, 0, 50, 0, 'yes', 'rare', 'none', 'no', 'A rare seed that will restore your mana by 200 and magically heal small wounds.')
-        }
-        
-        unluckyholelootpool = {
-            'Bug Attack': ('Bug Attack', 0, 0, 0, 0, 0, 0, 0, 'no', 'common', 'none', 'no', 'A nasty bug bite.'),
-            'Crappy Food': ('Crappy Food', 1, 0, 0, 0, 5, 0, -5, 'no', 'common', 'none', 'yes', 'Horrible food, too bad to even look edible.'),
-            'Garbage': ('Garbage', 1, 0, 0, 0, 0, 0, 0, 'no', 'common', 'none', 'no', 'Literal garbage.')
-        }
-        
+    def mildewsmallgarden(): #Later thought, maybe just make a randint and if its a certain value make it so they get an item with the additem function, instead of doing something so complicated
         green = colorcode('uncommon')
         red = colorcode('mythic')
-        
+
         global GardenCooldown
         currenttime = time.time()
-        interval = 15 * 60
-        time_since_last_garden = currenttime - GardenCooldown
-        time_to_wait = (interval - time_since_last_garden) / 60
-        
-        if currenttime - GardenCooldown >= interval:
+        interval = 15  # Interval in minutes between garden mini-games
+        time_since_last_garden = (currenttime - GardenCooldown) / 60  # Time passed since last garden mini-game in minutes
+        time_to_wait = (interval - time_since_last_garden) / 60  # Time remaining to wait in minutes
+
+        # Check if enough time has passed since the last mini-game
+        if time_since_last_garden >= interval:
             gardenminigamequestion = True
             time.sleep(sleep_duration)
             print(f'\nYou enter the garden, there seems to be 6 holes in the ground, do you reach in one?\n')
             time.sleep(sleep_duration)
-            
+
             while gardenminigamequestion:
                 Y_or_N_for_garden = input('(Y)es or (N)o?').strip().lower()
                 if Y_or_N_for_garden == 'y':
                     doingminigame = True
-                    print('You decide to stick your hand into a hole... Which one? (1-6)')
+                    print('You decide to stick your hand into a hole... Which one? (1-10)')
                     while doingminigame:
                         gardenminigame = input(f'\n1, 2, 3, 4, 5, 6\n').strip()
-                        
-                        # Fixed values for testing; uncomment for random values
-                        # holewgoodloot = random.randint(1, 6)
-                        # holewithbadloot = random.randint(1, 6)
-                        holewgoodloot = 1
-                        holewithbadloot = 2
-                        
-                        # Ensure bad loot hole is different from good loot hole
-                        # while holewithbadloot == holewgoodloot:
-                        #     holewithbadloot = random.randint(1, 6)
-                        
+                        holewgoodloot = random.randint(1, 10)
+                        holewithbadloot = random.randint(1, 10)
+                        while holewithbadloot == holewgoodloot:
+                            holewithbadloot = random.randint(1, 10)
+
                         print(f'Checking hole {gardenminigame}...')
-                        
+
                         if int(gardenminigame) == holewgoodloot:
                             print(f'You put your hand in hole {gardenminigame}...')
                             time.sleep(sleep_long)
                             print(f'{green}LUCKY!{Color.END}')
                             time.sleep(sleep_short)
-                            
-                            itemfoundinluckyhole = random.choice(list(luckyholelootpool.values()))
-                            print(f'Item found in lucky hole: {itemfoundinluckyhole}')
-                            name = itemfoundinluckyhole[0]
-                            quantity = itemfoundinluckyhole[1]
-                            value = itemfoundinluckyhole[2]
-                            power = itemfoundinluckyhole[3]
-                            mana = itemfoundinluckyhole[4]
-                            stamina = itemfoundinluckyhole[5]
-                            health = itemfoundinluckyhole[6]
-                            summonslots = itemfoundinluckyhole[7]
-                            equipable = itemfoundinluckyhole[8]
-                            rarity = itemfoundinluckyhole[9]
-                            slot = itemfoundinluckyhole[10]
-                            consumable = itemfoundinluckyhole[11]
-                            description = itemfoundinluckyhole[12]
-                            
-                            # Assuming `inv` is defined somewhere in the code. Replace `inv` with your inventory variable.
-                            inv = {}  # Example inventory; replace with actual inventory
-                            silentadditem(inv, *itemfoundinluckyhole)
-                            color_code = colorcode(rarity)
-                            print(f'You found {color_code}{name}{Color.END}!')
+
+                            itemfoundinluckyhole = random.randint(0, 1)
+                            if itemfoundinluckyhole <= 0.4:
+                                additem(inv, "mgcseed", 'Magic Seed', 1, 100, 0, 200, 0, 50, 0, 'no', 'rare', 'none', 'yes', 'A rare seed that will restore your mana by 200 and magically heal small wounds.')
+                            elif itemfoundinluckyhole <= 0.8:
+                                additem(inv, "Med Heal", "Medium Healing Potion", 1, 150, 0, 0, 0, 150, 0, 'no', "rare", 'none', 'yes', 'A healing potion crafted larger and stronger than its smaller versions')
+                            else:
+                                additem(inv, 'sm pouch', "Small Pouch of Gold", 1, 135, 0, 0, 0, 0, 0, 0, 'uncommon', 'none', 'no', 'A sealed small pouch with a small amount of gold, can be sold to a merchant, who will give you a large share of the gold found')
                             time.sleep(sleep_duration)
-                            
+
                             GardenCooldown = currenttime
                             doingminigame = False
-                            
+
                         elif int(gardenminigame) == holewithbadloot:
                             print(f'You put your hand in hole {gardenminigame}...')
                             time.sleep(sleep_long)
                             print(f'{red}UNLUCKY{Color.END}')
                             time.sleep(sleep_short)
-                            
-                            itemfoundinunluckyhole = random.choice(list(unluckyholelootpool.values()))
-                            print(f'Item found in unlucky hole: {itemfoundinunluckyhole}')
-                            if itemfoundinunluckyhole[0] == 'Bug Attack':
+                            itemfoundinunluckyhole = random.randint(0, 1)
+                            if itemfoundinunluckyhole <= 0.2:
                                 print('OW!....')
                                 time.sleep(sleep_short)
                                 damagefrombug = random.randint(1, 20)
@@ -697,19 +666,15 @@ def mildewvillagesquare():
                                 GardenCooldown = currenttime
                                 doingminigame = False
                             else:
-                                silentadditem(*itemfoundinunluckyhole)
-                                name = itemfoundinunluckyhole[0]
-                                rarity = itemfoundinunluckyhole[9]
-                                color_code = colorcode(rarity)
-                                print(f'You found {color_code}{name}{Color.END}')
+                                additem(inv, "garbage", 'Garbage', 1, 0, 0, 0, 0, 0, 0, 'no', 'common', 'none', 'no', 'Literal garbage.')
                                 time.sleep(sleep_duration)
                                 mildewvillagesquare()
                                 GardenCooldown = currenttime
                                 doingminigame = False
-                        
+
                         elif not gardenminigame.isdigit():
                             print('Choose a number 1-6')
-                        
+
                         else:
                             print(f'You put your hand in hole {gardenminigame}...')
                             time.sleep(sleep_long)
@@ -726,14 +691,14 @@ def mildewvillagesquare():
                     time.sleep(sleep_duration)
                     mildewvillagesquare()
                     gardenminigamequestion = False
-                
+
                 else:
                     print('(Y)es or (N)o?')
-
         else:
             print(f'You need to wait another {time_to_wait:.1f} minutes to do this again.')
             time.sleep(sleep_duration)
             mildewvillagesquare()
+
 
 
 
@@ -783,9 +748,9 @@ def mildewvillagesquare():
                                 addgold(105)
                                 additem(inv, 'Ednacookie', 'Ednas Chocolate Chip Cookie', 5, 0, 0, 20, 20, 20, 0, 'no', 'rare', 'none', 'yes', 'Baked with Love')
                                 time.sleep(sleep_long)
-                                
+
                                 finishedquest('Gather Herbs for Edna')
-                                
+
                                 ednasdialogue()
                             else:
                                 print('Edna: Thats not 3? Gather me 3 please, come back when youre done')
@@ -803,7 +768,7 @@ def mildewvillagesquare():
                         time.sleep(sleep_duration)
                         ednagivingointment +=1
                         ednasdialogue()
-                            
+
 
                 elif choice == 'hug':
                     print(f'{name}: Could i have a hug?')
@@ -850,7 +815,7 @@ def mildewvillagesquare():
         time.sleep(sleep_duration)
         print("(J)ohn's Butcher Shop, (A)lley, (S)mall garden, (O)ld Widow Edna's House, (F)orest, (P)layer Menu")
         wheregoinmildew = input("\nWhere do you go?").lower().strip()
-        
+
         if wheregoinmildew == 'j':
             mildewgoto = False
             Johnmildewshop()
@@ -891,7 +856,7 @@ def mainplaymenu():
     def inventory():
         def update_weapon_slots():
             global equipeditems
-            
+
             # Scenario 1 & 2: If only WeaponLeft or WeaponRight has an item, make WeaponBoth full
             if (equipeditems['WeaponLeft'] and not equipeditems['WeaponRight']) or (equipeditems['WeaponRight'] and not equipeditems['WeaponLeft']):
                 if not equipeditems['WeaponBoth']:
@@ -979,7 +944,7 @@ def mainplaymenu():
                         if slot == "ring":
                             if "ring" not in equipeditems:
                                 equipeditems["ring"] = []
-                                
+
                             if len(equipeditems["ring"]) < 2:
                                 equipeditems["ring"].append(item_details)
                                 newequipeditems[itemtoequip] = item_details
@@ -1121,51 +1086,51 @@ def mainplaymenu():
                 inventory()
             else:
                 print("Item not found.")
-            
+
             update_weapon_slots()
             inventory()
         def useitem():
 
-        
+
             global currenthealth, currentstamina, currentmana
-            
+
             for item_id, details in inv.items():
                 if details.get('consumable') == 'yes':
                     color_code = colorcode(details.get('rarity', 'common'))
                     print(f'\n{color_code}{details.get("name", "Unknown")}{Color.END}')
                     display_item_stats(details)
                     print(f'A {details.get("slot", "unknown")} Equipable')
-            
+
             whatwantuse = input('\nWhat would you like to use?').lower().strip()
-            
+
             item_to_use = None
             for item_id, details in inv.items():
                 if details.get('name', '').lower() == whatwantuse:
                     item_to_use = (item_id, details)
                     break
-            
+
             if item_to_use:
                 item_id, details = item_to_use
                 if details.get('consumable') == 'yes':
                     healthtoadd = details.get('health', 0)
                     staminatoadd = details.get('stamina', 0)
                     manatoadd = details.get('mana', 0)
-                    
+
                     currenthealth += healthtoadd
                     currentstamina += staminatoadd
                     currentmana += manatoadd
-                    
+
                     removeitem(inv, item_id, 1)
-                    
+
                     checkcurrentstats()
-                    
+
                     if healthtoadd > 0:
                         print(f"+ {healthtoadd} health")
                     if manatoadd > 0:
                         print(f"+{manatoadd} mana")
                     if staminatoadd > 0:
                         print(f"+{staminatoadd} stamina")
-                    
+
                     time.sleep(sleep_short)
                     inventory()
                 else:
@@ -1183,7 +1148,7 @@ def mainplaymenu():
                 description = details['description']
                 color_code = colorcode(rarity)  # Get the color code for the rarity
                 whitecolor = colorcode('common')
-                
+
                 print(f"\nName: {color_code}{name}{Color.END}, Quantity: {quantity}, Value: {value}, Rarity: {rarity}, {whitecolor}Description: {description}{Color.END}")
             trashing = True
             time.sleep(sleep_duration)
@@ -1195,12 +1160,12 @@ def mainplaymenu():
                     if details.get('name', '').lower() == trash:
                         item_to_trash = (item_id, details)
                         break
-                
+
                 if item_to_trash:
                     item_id, details = item_to_trash
                     name = details.get('name', None)
                     print(f'How many of {name} would you like to trash? (You have {details.get("quantity", 0)})')
-                
+
                     amount = input('').strip()
                     if amount.isdigit():  # Correct validation check
                         amount = int(amount)
@@ -1210,7 +1175,7 @@ def mainplaymenu():
                             suresure = False
                             while not suresure:
                                 sure = input('(Y) or (N)?').lower().strip()
-                                if sure == 'y': 
+                                if sure == 'y':
                                     allofthem = details.get('quantity', 0)
                                     deleteitem(inv, item_id, allofthem)  # Fix: use item_id
                                     time.sleep(sleep_short)
@@ -1236,7 +1201,7 @@ def mainplaymenu():
                                     inventory()
                                     trashing = False
                                     suresure = True
-                    else:       
+                    else:
                         print('Please enter a number.')
                 elif trash == 'b':
                     print('Returning')
@@ -1275,23 +1240,23 @@ def mainplaymenu():
             description = details['description']
             color_code = colorcode(rarity)  # Get the color code for the rarity
             whitecolor = colorcode('common')
-            
+
             print(f"\nName: {color_code}{name}{Color.END}, Quantity: {quantity}, Value: {value}, Rarity: {rarity}, {whitecolor}Description: {description}{Color.END}")
         while True:
             invquestion = input("\nWould you like to 'Go (B)ack', '(E)quip Gear', '(U)nequip Gear', '(USE) Item', or '(T)rash item").lower().strip()
-            
+
             if invquestion == "b":
                 mainplaymenu()
-                
+
             elif invquestion == "e":
                 equipitems()
-                
+
             elif invquestion == "u":
                 unequipitems()
-                
+
             elif invquestion == "use":
                 useitem()
-            
+
             elif invquestion == 't':
                 trashitem()
             else:
@@ -1397,7 +1362,7 @@ def mainplaymenu():
                 klaskldlsadklsakldsak = True
             else:
                 print("Type 'Yes' if you have seen your gear")
-                
+
     main = ("(I)nventory", "(Q)uests", "(S)tats", "(L)ook around", "(G)ear")
     print(f'\n{main}')
     selectedinmenu = False
@@ -1523,7 +1488,7 @@ def isplayeralive():
                 print("Thank you for playing, friend.")
             else:
                 print("Invalid answer. Please type 'yes' or 'no'.")
-        
+
 
 def nameis(): # Asks the player's name
     global name
@@ -1536,14 +1501,15 @@ def purpose():
     global name
     fam = False
     while not fam:
-        family = input("Do you have a family, " + name + "? ").strip().lower()
+        family = input("Do you remember your family, " + name + "? ").strip().lower()
         if family == "yes":
-            print("No longer my friend.")
+            print("This may be hard to hear...")
             time.sleep(sleep_short)
             fam = True
         elif family == "no":
             time.sleep(sleep_short)
-            print("My condolences, " + name + ".")
+            print("This may be a little easier to bear then, " + name + ".")
+            time.sleep(sleep_duration)
             fam = True
         else:
             print("Invalid answer. Please type 'yes' or 'no'.")
@@ -1553,7 +1519,7 @@ def mainclass(): # Choosing main class for the entire game
     choice = False
     while not choice:
         time.sleep(sleep_short)
-        spec = input("I'm sorry for your loss. Your family was killed by an evil wizard. What class will you choose to avenge your family? (warlock, brawler, swordsman, necromancer) ").strip().lower()
+        spec = input("I'm so sorry friend... Your family was slaughtered just last night, A shady wisard was seen around the village last night, it was him... On your quest for revenge which path do you choose to follow? (warlock, brawler, swordsman, necromancer) ").strip().lower()
         if spec == "warlock":
             power = 5
             stamina = 60
@@ -1622,7 +1588,7 @@ def startofadventure():
     time.sleep(sleep_short)
     starttt = False
     while not starttt:
-        print("This is the start of your journey, are you sure you want that class for the rest of it?")#inv, item_id, name, quantity, value, power, mana, stamina, health, summonslots, equiped, equipable, rarity
+        print("This is the start of your journey, are you sure you want that class forever?")#inv, item_id, name, quantity, value, power, mana, stamina, health, summonslots, equiped, equipable, rarity
         finalizeclass = input("Yes or No ").strip().lower()
         if finalizeclass == "yes":
             if spec == "necromancer":
@@ -1671,6 +1637,6 @@ def mildewvillage():#DONT THINK THIS DOES ANYTHING CURRENTLY
     global playerlocation
     location = mildewvillage
     playerlocation = mildewvillage
-    
+
 # Start the game
 startofgame()
