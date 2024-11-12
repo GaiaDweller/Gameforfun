@@ -84,6 +84,10 @@ def addgold(amount):
     global gold
     print(f'+{amount} gold')
     gold += amount
+def sellitem(itemsold): #EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+    global gold, inv
+    print(f'-Sold {itemsold}')
+    pass
 def additem(inv, item_id, name, quantity, value, power, mana, stamina, health, summonslots, equipable, rarity, slot, consumable, description):
     color_code = colorcode(rarity)
     if item_id in inv:
@@ -106,6 +110,16 @@ def silentadditem(inv, item_id, name, quantity, value, power, mana, stamina, hea
             'stamina': stamina, 'health': health, 'summonslots': summonslots, 'equipable': equipable,
             'rarity': rarity, 'slot': slot, 'consumable' : consumable, 'description': description
         }
+def silentremoveitem(inv, item_id, quantity):
+    if item_id in inv:
+        if inv[item_id]['quantity'] >= quantity:
+            rarity = inv[item_id]['rarity']
+            color_code = colorcode(rarity)
+            inv[item_id]['quantity'] -= quantity
+            if inv[item_id]['quantity'] == 0:
+                del inv[item_id]
+    else:
+        print("Item not found in inventory.")
 
 def removeitem(inv, item_id, quantity):
     if item_id in inv:
@@ -227,7 +241,7 @@ def doctorheal():
 def mildewvillagesquare():
     def Johnmildewshop():
         def johnsshop():
-            global gold
+            global gold, equipeditems, inv
             print('John: Let me check what i have for you...')
             time.sleep(sleep_duration)
             print('''
@@ -240,11 +254,30 @@ def mildewvillagesquare():
             buyingfromjohn = True
             while buyingfromjohn:
                 print('John: What would you like to buy?')
-                purchasefromjohn = input('Items name or (N)evermind').lower().strip()
+                purchasefromjohn = input('Items name, (N)evermind, (S)ell').lower().strip()
                 if purchasefromjohn == 'savory meat' or purchasefromjohn == 'strongly seasoned meat' or purchasefromjohn == 'sharp tasting meat' or purchasefromjohn == 'steak' or purchasefromjohn == 'raw meat' or purchasefromjohn == 'n':
+                    buyingfromjohn = False
+                if purchasefromjohn == 's':
+                    sellingtojohn = True
                     buyingfromjohn = False
                 else:
                     print('John: What was that?')
+
+            while sellingtojohn == True:
+                #AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                print("\nInventory:")
+                for item_id, details in inv.items():
+                    name = details['name']
+                    quantity = details['quantity']
+                    value = details['value']
+                    rarity = details['rarity']
+                    description = details['description']
+                    color_code = colorcode(rarity)  # Get the color code for the rarity
+                    whitecolor = colorcode('common')
+
+                    print(f"\nName: {color_code}{name}{Color.END}, Quantity: {quantity}, Value: {value}, Rarity: {rarity}, {whitecolor}Description: {description}{Color.END}")
+
+                    itemtosell = input("John: What would you like to sell lad?")
             if purchasefromjohn == 'savory meat':
                 howmanyy = True
                 while howmanyy:
@@ -597,8 +630,6 @@ def mildewvillagesquare():
                 askquestionjohn = False
             else:
                 print("What was that kid? My ears aren't the same as they used to be... HOH HOH!")
-    def mildewalley():
-        pass
     def mildewsmallgarden(): #Later thought, maybe just make a randint and if its a certain value make it so they get an item with the additem function, instead of doing something so complicated
         green = colorcode('uncommon')
         red = colorcode('mythic')
@@ -622,7 +653,7 @@ def mildewvillagesquare():
                     doingminigame = True
                     print('You decide to stick your hand into a hole... Which one? (1-10)')
                     while doingminigame:
-                        gardenminigame = input(f'\n1, 2, 3, 4, 5, 6\n').strip()
+                        gardenminigame = input(f'\n1, 2, 3, 4, 5, 6, 7, 8, 9, 10\n').strip()
                         holewgoodloot = random.randint(1, 10)
                         holewithbadloot = random.randint(1, 10)
                         while holewithbadloot == holewgoodloot:
@@ -673,7 +704,7 @@ def mildewvillagesquare():
                                 doingminigame = False
 
                         elif not gardenminigame.isdigit():
-                            print('Choose a number 1-6')
+                            print('Choose a number 1-10')
 
                         else:
                             print(f'You put your hand in hole {gardenminigame}...')
@@ -813,15 +844,12 @@ def mildewvillagesquare():
     mildewgoto = True
     while mildewgoto:
         time.sleep(sleep_duration)
-        print("(J)ohn's Butcher Shop, (A)lley, (S)mall garden, (O)ld Widow Edna's House, (F)orest, (P)layer Menu")
+        print("(J)ohn's Butcher Shop, (S)mall garden, (O)ld Widow Edna's House, (F)orest, (P)layer Menu")
         wheregoinmildew = input("\nWhere do you go?").lower().strip()
 
         if wheregoinmildew == 'j':
             mildewgoto = False
             Johnmildewshop()
-        elif wheregoinmildew == 'a':
-            mildewgoto = False
-            mildewalley()
         elif wheregoinmildew == 's':
             mildewgoto = False
             mildewsmallgarden()
