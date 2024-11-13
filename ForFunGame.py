@@ -84,9 +84,16 @@ def addgold(amount):
     global gold
     print(f'+{amount} gold')
     gold += amount
-def sellitem(itemsold): #EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
-    global gold, inv
-    print(f'-Sold {itemsold}')
+def sellitem(itemsold, amount): #EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+    global gold, inv, item_id, value, quantity
+    for item_id in inv:
+        if item_id[name] == itemsold:
+            price = item_id[value]
+            if item_id[quantity] > amount:
+                toomany = input(f'You only have {item_id[quantity]} of {itemsold}, how many would you like to sell?')
+
+
+    print(f'-Sold {amount} {itemsold} for {price} gold')
     pass
 def additem(inv, item_id, name, quantity, value, power, mana, stamina, health, summonslots, equipable, rarity, slot, consumable, description):
     color_code = colorcode(rarity)
@@ -251,34 +258,36 @@ def mildewvillagesquare():
                   Steak: 30 Gold
                   Raw Meat: 15 Gold
 ''')
+            sellingtojohn = False
             buyingfromjohn = True
             while buyingfromjohn:
                 print('John: What would you like to buy?')
-                purchasefromjohn = input('Items name, (N)evermind, (S)ell').lower().strip()
+                purchasefromjohn = input('Items name, (N)evermind, (S)ell : ').lower().strip()
                 if purchasefromjohn == 'savory meat' or purchasefromjohn == 'strongly seasoned meat' or purchasefromjohn == 'sharp tasting meat' or purchasefromjohn == 'steak' or purchasefromjohn == 'raw meat' or purchasefromjohn == 'n':
                     buyingfromjohn = False
-                if purchasefromjohn == 's':
+                elif purchasefromjohn == 's':
                     sellingtojohn = True
                     buyingfromjohn = False
                 else:
                     print('John: What was that?')
+            if sellingtojohn == True:
+                while sellingtojohn == True:
+                    #AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                    print("\nInventory:")
+                    for item_id, details in inv.items():
+                        name = details['name']
+                        quantity = details['quantity']
+                        value = details['value']
+                        rarity = details['rarity']
+                        description = details['description']
+                        color_code = colorcode(rarity)  # Get the color code for the rarity
+                        whitecolor = colorcode('common')
 
-            while sellingtojohn == True:
-                #AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-                print("\nInventory:")
-                for item_id, details in inv.items():
-                    name = details['name']
-                    quantity = details['quantity']
-                    value = details['value']
-                    rarity = details['rarity']
-                    description = details['description']
-                    color_code = colorcode(rarity)  # Get the color code for the rarity
-                    whitecolor = colorcode('common')
+                        print(f"\nName: {color_code}{name}{Color.END}, Quantity: {quantity}, Value: {value}, Rarity: {rarity}, {whitecolor}Description: {description}{Color.END}")
 
-                    print(f"\nName: {color_code}{name}{Color.END}, Quantity: {quantity}, Value: {value}, Rarity: {rarity}, {whitecolor}Description: {description}{Color.END}")
+                        itemtosell = input("John: What would you like to sell lad?")
 
-                    itemtosell = input("John: What would you like to sell lad?")
-            if purchasefromjohn == 'savory meat':
+            elif purchasefromjohn == 'savory meat':
                 howmanyy = True
                 while howmanyy:
                     howmany = input('John: How Many? (N)evermind')
@@ -286,7 +295,7 @@ def mildewvillagesquare():
                     if gold >= price:
                         additem(inv, 'SM', 'Savory Meat', howmany, 50, 0, 25, 25, 125, 0, 'no', 'rare', None, 'yes', 'When you taste this meat, you will feel so many great emotions, John is an amazing cook...')
                         howmanyy = False
-                    if howmany == 'n':
+                    elif howmany == 'n':
                         print('John: Alrighty then, Anything else?')
                         time.sleep(sleep_duration)
                         johnsshop()
@@ -297,7 +306,7 @@ def mildewvillagesquare():
                         howmanyy = False
 
                         johnsshop()
-            if purchasefromjohn == 'strongly seasoned meat':
+            elif purchasefromjohn == 'strongly seasoned meat':
                 howmanyy = True
                 while howmanyy:
                     howmany = input('John: How Many? (N)evermind')
@@ -305,7 +314,7 @@ def mildewvillagesquare():
                     if gold >= price:
                         additem(inv, 'SSM', 'Strongly Seasoned Meat', howmany, 30, 0, 15, 15, 70, 0, 'no', 'uncommon', None, 'yes', 'John is a great cook, this meat will keep you well fed and possibly accelerate your healing...')
                         howmanyy = False
-                    if howmany == 'n':
+                    elif howmany == 'n':
                         print('John: Alrighty then, Anything else?')
                         time.sleep(sleep_duration)
                         johnsshop()
@@ -316,7 +325,7 @@ def mildewvillagesquare():
                         howmanyy = False
 
                         johnsshop()
-            if purchasefromjohn == 'sharp tasting meat':
+            elif purchasefromjohn == 'sharp tasting meat':
                 howmanyy = True
                 while howmanyy:
                     howmany = input('John: How Many? (N)evermind')
@@ -324,7 +333,7 @@ def mildewvillagesquare():
                     if gold >= price:
                         additem(inv, 'STM', 'Sharp Tasting Meat', howmany, 20, 0, 10, 10, 45, 0, 'no', 'uncommon', None, 'yes', 'Meat with an interesting taste!')
                         howmanyy = False
-                    if howmany == 'n':
+                    elif howmany == 'n':
                         print('John: Alrighty then, Anything else?')
                         time.sleep(sleep_duration)
                         johnsshop()
@@ -335,7 +344,7 @@ def mildewvillagesquare():
                         howmanyy = False
 
                         johnsshop()
-            if purchasefromjohn == 'steak':
+            elif purchasefromjohn == 'steak':
                 howmanyy = True
                 while howmanyy:
                     howmany = input('John: How Many? (N)evermind')
@@ -343,7 +352,7 @@ def mildewvillagesquare():
                     if gold >= price:
                         additem(inv, 'S', 'Steak', howmany, 10, 0, 5, 5, 25, 0, 'no', 'common', None, 'yes', 'Steak, Blessed with johns great cooking...')
                         howmanyy = False
-                    if howmany == 'n':
+                    elif howmany == 'n':
                         print('John: Alrighty then, Anything else?')
                         time.sleep(sleep_duration)
                         johnsshop()
@@ -354,7 +363,7 @@ def mildewvillagesquare():
                         howmanyy = False
 
                         johnsshop()
-            if purchasefromjohn == 'raw meat':
+            elif purchasefromjohn == 'raw meat':
                 howmanyy = True
                 while howmanyy:
                     howmany = input('John: How Many? (N)evermind')
@@ -362,7 +371,7 @@ def mildewvillagesquare():
                     if gold >= price:
                         additem(inv, 'RM', 'Raw Meat', howmany, 30, 0, 2, 2, -15, 0, 'no', 'common', None, 'yes', 'Uncooked Meat, maybe you could cook it eventually?')
                         howmanyy = False
-                    if howmany == 'n':
+                    elif howmany == 'n':
                         print('John: Alrighty then, Anything else?')
                         time.sleep(sleep_duration)
                         johnsshop()
@@ -373,7 +382,7 @@ def mildewvillagesquare():
                         howmanyy = False
 
                         johnsshop()
-            if purchasefromjohn == 'n':
+            elif purchasefromjohn == 'n':
                 print('John: Alrighty then, if u need anything let me know!')
                 time.sleep(sleep_duration)
                 Johnmildewshop()
