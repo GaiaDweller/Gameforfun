@@ -1637,7 +1637,7 @@ def startofadventure():
                 addgold(50)
                 starttt = True
             elif spec == "brawler":
-                additem(inv, "CSC", "Cracked Stone Cestus", 1, 12, 25, 0, -12, 15, 0,'yes', 'common', 'WeaponBoth', 'no', 'Two old rocks you hand carved yourself, you dropped it and it cracked though.')
+                additem(inv, "CSC", "Cracked Stone Cestus", 1, 12, 25, 0, -12, 15, 0,'yes', 'common', 'WeaponBoth', 'no', 'Two old rocks you hand carved yourself, you dropped them and they got cracked though.')
                 additem(inv, "Start Fighters Wraps", "Fighters Wraps", 1, 15, 10, 0, 25, 10, 0,'yes', 'uncommon', 'Arms', 'no', 'Leather strips, your father taught you how to reinforce your wrists using them, not a common technique.')
                 additem(inv, "Fathers Armor", "Leather Patchwork Armor", 1, 100, 0, 0, 10, 100, 0,'yes', 'common', 'Torso', 'no', 'Old armor your father had in his closet')
                 addlesserhealingpotion(6)
@@ -1651,7 +1651,7 @@ def startofadventure():
                 addgold(50)
                 starttt = True
             elif spec == 'swordsman':
-                additem(inv, 'IS', 'Iron Sword', 1, 50, 32, 0, -10, 10, 0, 'yes', 'common', 'WeaponRight', 'yes', 'A sword forged iron, your average adventurer gear')
+                additem(inv, 'IS', 'Iron Sword', 1, 50, 32, 0, -10, 10, 0, 'yes', 'common', 'WeaponRight', 'yes', 'A sword forged of iron, your average adventurer gear')
                 additem(inv, 'CM', 'ChainMail', 1, 62, 0, 0, -5, 85, 0, 'yes', 'uncommon', 'Torso', 'no', 'Chains linked together to form a protective layer, useful against slashing attacks.')
                 additem(inv, 'PL', 'Padded Leggings', 1, 15, 0, 0, 15, 50, 0, 'yes', 'common', 'Legs', 'no', 'Pants with iron plates inserted for extra protection.')
                 additem(inv, 'IG', 'Iron Gloves', 1, 15, 2, 0, -5, 15, 0, 'yes', 'common', 'Hands', 'no', 'Gloves with iron protection, good for paper cuts...')
